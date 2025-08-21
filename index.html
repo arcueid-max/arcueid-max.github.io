@@ -1,12 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>我的第一个 GitHub Pages</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的 GitHub Pages 网站</title>
+  <style>
+    /* 页面整体样式 */
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      background: #f4f4f9;
+      color: #333;
+    }
+
+    /* 顶部导航栏 */
+    header {
+      background: #24292e;
+      color: #fff;
+      padding: 15px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* 主体内容 */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .container h2 {
+      text-align: center;
+      color: #24292e;
+    }
+
+    .intro {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 15px;
+      background: #0366d6;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #024fa1;
+    }
+
+    /* 底部 */
+    footer {
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+      background: #24292e;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello, GitHub Pages!</h1>
-    <p>这是我托管在 GitHub 上的第一个网站。</p>
+
+  <!-- 顶部导航 -->
+  <header>
+    <h1>欢迎来到我的网站 🎉</h1>
+    <nav>
+      <a href="#">首页</a>
+      <a href="#">关于我</a>
+      <a href="#">项目</a>
+      <a href="#">联系</a>
+    </nav>
+  </header>
+
+  <!-- 主体内容 -->
+  <div class="container">
+    <h2>Hello, GitHub Pages!</h2>
+    <p class="intro">
+      这是我托管在 <strong>GitHub Pages</strong> 上的个人网站。<br>
+      我可以在这里展示我的项目、写博客、分享学习笔记。
+    </p>
+    <div style="text-align:center;">
+      <a href="https://github.com/arcueid-max" class="btn" target="_blank">访问我的 GitHub</a>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <footer>
+    <p>© 2025 by Arcueid-Max | Powered by GitHub Pages</p>
+  </footer>
+
 </body>
 </html>
-

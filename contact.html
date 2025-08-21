@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联系我们 - 答而有据</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.8;
+      background: #f8fafc;
+      color: #333;
+    }
+
+    header {
+      background: #24292e;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    nav {
+      margin-top: 8px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    section h2 {
+      border-left: 5px solid #007bff;
+      padding-left: 10px;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .info {
+      margin: 20px 0;
+    }
+
+    .info p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin: 15px 0;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 18px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      background: #24292e;
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header>
+    <h1>联系我们 📬</h1>
+    <nav>
+      <a href="index.html">首页</a>
+      <a href="rag.html">RAG 知识库</a>
+      <a href="faq.html">常见问答</a>
+      <a href="progress.html">项目进展</a>
+      <a href="contact.html">联系我们</a>
+    </nav>
+  </header>
+
+  <!-- 主体 -->
+  <div class="container">
+    <section>
+      <h2>联系方式</h2>
+      <div class="info">
+        <p>📧 邮箱： <a href="mailto:team@example.com">team@example.com</a></p>
+        <p>📱 电话： (+86) 123-4567-890</p>
+        <p>🏫 学校：北京交通大学</p>
+        <p>📍 地址：北京市海淀区上园村3号</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>在线留言</h2>
+      <form onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="name">姓名</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">邮箱</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">留言</label>
+          <textarea id="message" rows="5" required></textarea>
+        </div>
+        <button type="submit">提交</button>
+      </form>
+      <p id="status"></p>
+    </section>
+  </div>
+
+  <!-- 底部 -->
+  <footer>
+    <p>© 2025 答而有据 | 联系我们</p>
+  </footer>
+
+  <script>
+    function submitForm(event) {
+      event.preventDefault();
+      document.getElementById("status").textContent = "✅ 感谢您的留言，我们会尽快回复！";
+      // 🚀 这里可以扩展：把留言 POST 到后端 API 或存到数据库
+    }
+  </script>
+
+</body>
+</html>

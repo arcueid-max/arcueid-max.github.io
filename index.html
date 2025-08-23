@@ -1,160 +1,117 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>答而有据 - RAG 知识问答平台</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      line-height: 1.6;
-      background: linear-gradient(135deg, #f0f4f8, #e6ecf2);
-      color: #333;
-    }
-
-    header {
-      background: #24292e;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    nav {
-      margin-top: 10px;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    section {
-      margin-bottom: 40px;
-    }
-
-    section h2 {
-      text-align: center;
-      margin-bottom: 15px;
-      color: #222;
-      font-size: 22px;
-    }
-
-    section p, section ul {
-      text-align: justify;
-      font-size: 16px;
-      line-height: 1.8;
-    }
-
-    ul li {
-      margin-bottom: 8px;
-    }
-
-    .btn-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      background: #0366d6;
-      color: #fff;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .btn:hover {
-      background: #024fa1;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      background: #24292e;
-      color: #fff;
-      font-size: 14px;
-    }
-  </style>
-</head>
 <body>
+  <!-- 导航栏 -->
+  <div id="navbar"></div>
 
-  <!-- 顶部导航 -->
-  <header>
-    <h1>答而有据 · 基于 RAG 的智能问答学习平台</h1>
-    <nav>
-      <a href="index.html">首页</a>
-      <a href="rag.html">RAG 知识库</a>
-      <a href="faq.html">常见问答</a>
-      <a href="progress.html">项目进展</a>
-      <a href="contact.html">联系我们</a>
-    </nav>
-  </header>
-
-  <!-- 主体内容 -->
+  <!-- 主体 -->
   <div class="container">
-    <section>
-      <h2>项目简介</h2>
-      <p>
-        “答而有据”是一个基于 <strong>RAG（检索增强生成）</strong> 技术的智能问答学习平台。  
-        我们希望通过结合大语言模型的生成能力与知识库的检索能力，  
-        构建一个能够 <b>准确、可溯源、可解释</b> 的智能问答系统，  
-        为学习、科研和工程实践提供可靠支持。
-      </p>
-    </section>
+    <h2>欢迎来到答而有据 🎉</h2>
+    <p>这是我们的 RAG 知识增强问答学习平台。</p>
 
-    <section>
-      <h2>核心功能</h2>
-      <ul>
-        <li>📖 提供 RAG 基础知识与学习资料</li>
-        <li>💡 展示开发流程与代码示例</li>
-        <li>🤖 常见问题与解答（FAQ）</li>
-        <li>🚀 项目进展与阶段成果</li>
-      </ul>
-    </section>
+    <!-- 成果展示区块 -->
+    <div class="highlight">
+      <h3>✨ 立即体验我们的成果</h3>
+      <p>输入你的问题，马上获得智能回答：</p>
 
-    <section>
-      <h2>团队信息</h2>
-      <p>
-        我们是一支来自 <b>北京交通大学</b> 的大创团队，  
-        团队成员来自计算机与人工智能相关专业，  
-        致力于探索大模型与知识增强结合的应用场景，  
-        推动智能问答系统的落地与普及。
-      </p>
-    </section>
-
-    <div class="btn-container">
-      <a href="https://github.com/arcueid-max" class="btn" target="_blank">访问我们的 GitHub</a>
+      <input id="question" type="text" placeholder="请输入你的问题..." />
+      <button onclick="ask()">提交 🚀</button>
+      <pre id="answer"></pre>
     </div>
   </div>
 
-  <!-- 底部 -->
-  <footer>
-    <p>© 2025 答而有据 | 基于 GitHub Pages 搭建</p>
-  </footer>
+  <!-- 页脚 -->
+  <div id="footer"></div>
 
+  <!-- 动态加载导航 & 页脚 -->
+  <script>
+    fetch("navbar.html")
+      .then(r => r.text())
+      .then(d => document.getElementById("navbar").innerHTML = d);
+
+    fetch("footer.html")
+      .then(r => r.text())
+      .then(d => document.getElementById("footer").innerHTML = d);
+
+    // ========= 配置区 =========
+    const apiEnabled = false; // 🚧 开发阶段 = false，上线后改为 true
+    const apiURL = "https://你的后端地址/ask"; // ✅ 上线后替换成你们的 API 地址
+    // ========================
+
+    async function ask() {
+      const q = document.getElementById("question").value.trim();
+      if (!q) {
+        document.getElementById("answer").textContent = "⚠️ 请输入一个问题";
+        return;
+      }
+
+      document.getElementById("answer").textContent = "🤔 正在思考中...";
+
+      if (apiEnabled) {
+        try {
+          let res = await fetch(apiURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: q })
+          });
+          let data = await res.json();
+          document.getElementById("answer").textContent = "✅ 回答：" + data.answer;
+        } catch (err) {
+          document.getElementById("answer").textContent = "❌ 调用后端失败，请稍后再试";
+        }
+      } else {
+        // 本地模拟回答
+        document.getElementById("answer").textContent = 
+          "🛠️ 模拟回答：你问了「" + q + "」，" +
+          "当前演示版未连接后端，敬请期待正式上线！";
+      }
+    }
+  </script>
 </body>
-</html>
+
+<style>
+  .highlight {
+    margin: 40px auto;
+    padding: 30px;
+    max-width: 700px;
+    text-align: center;
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .highlight h3 {
+    margin-bottom: 15px;
+    font-size: 22px;
+  }
+  .highlight p {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  input {
+    width: 70%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  button {
+    padding: 12px 24px;
+    background: #fff;
+    color: #007bff;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #f0f0f0;
+  }
+  pre {
+    text-align: left;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+  }
+</style>

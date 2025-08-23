@@ -4,184 +4,198 @@
   <meta charset="UTF-8">
   <title>答而有据 - 智能问答学习平台</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-      color: #333;
+      height: 100vh;
+      display: flex;
+      background: #f4f6f8;
     }
 
-    header {
-      background: #0073e6;
+    /* 左侧导航栏 */
+    .sidebar {
+      width: 220px;
+      background: #202123;
       color: white;
+      display: flex;
+      flex-direction: column;
       padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #10a37f;
     }
-
-    nav {
-      margin-top: 10px;
-    }
-
-    nav a {
-      margin: 0 15px;
+    .sidebar a {
+      color: #ddd;
       text-decoration: none;
+      padding: 10px;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background: #2a2b32;
       color: white;
-      font-weight: bold;
-      transition: color 0.3s;
     }
 
-    nav a:hover {
-      color: #ffeb3b;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
+    /* 右侧主要区域 */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .intro {
-      text-align: center;
-      margin-bottom: 40px;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
     }
-
-    .intro h2 {
+    .intro h1 {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
     .intro p {
-      font-size: 16px;
-      color: #555;
+      color: #666;
+      font-size: 15px;
     }
 
-    .qa-box {
+    /* 聊天窗口 */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ececec;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      line-height: 1.5;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+    .user {
+      align-self: flex-end;
+      background: #10a37f;
+      color: white;
+      border-bottom-right-radius: 2px;
+    }
+    .bot {
+      align-self: flex-start;
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      border: 1px solid #ddd;
+      border-bottom-left-radius: 2px;
     }
 
-    .qa-box h2 {
-      margin-bottom: 15px;
-      color: #0073e6;
-      font-size: 22px;
+    /* 输入区 */
+    .input-area {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+      background: #fff;
     }
-
     textarea {
-      width: 100%;
-      height: 100px;
-      margin-bottom: 15px;
+      flex: 1;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 14px;
       resize: none;
+      height: 50px;
     }
-
     button {
-      padding: 10px 20px;
+      margin-left: 10px;
+      padding: 0 20px;
       border: none;
       border-radius: 8px;
-      background: #0073e6;
+      background: #10a37f;
       color: white;
       font-size: 15px;
       cursor: pointer;
       transition: background 0.3s;
     }
-
     button:hover {
-      background: #005bb5;
-    }
-
-    #response {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f7f7f7;
-      border-radius: 8px;
-      min-height: 60px;
-      font-size: 15px;
-      line-height: 1.6;
-      color: #444;
-      white-space: pre-wrap;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      background: #f1f1f1;
-      color: #555;
-      font-size: 14px;
+      background: #0e8c6b;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>答而有据 - 智能问答学习平台</h1>
-    <nav>
-      <a href="index.html">首页</a>
-      <a href="faq.html">FAQ</a>
-      <a href="progress.html">项目进展</a>
-      <a href="rag.html">知识增强</a>
-      <a href="contact.html">联系我们</a>
-    </nav>
-  </header>
+  <!-- 左侧导航 -->
+  <div class="sidebar">
+    <h2>答而有据</h2>
+    <a href="index.html">首页</a>
+    <a href="faq.html">FAQ</a>
+    <a href="progress.html">项目进展</a>
+    <a href="rag.html">知识增强</a>
+    <a href="contact.html">联系我们</a>
+  </div>
 
-  <div class="container">
+  <!-- 右侧主要区域 -->
+  <div class="main">
+    <!-- 项目介绍 -->
     <div class="intro">
-      <h2>欢迎来到答而有据</h2>
+      <h1>欢迎来到答而有据</h1>
       <p>这是一个基于大模型和RAG技术的智能问答学习平台，旨在让知识问答更加精准、有据可依。</p>
     </div>
 
-    <div class="qa-box">
-      <h2>向大模型提问</h2>
-      <textarea id="question" placeholder="请输入你的问题..."></textarea><br>
-      <button onclick="askModel()">提交问题</button>
-      <div id="response">回答会显示在这里...</div>
+    <!-- 聊天窗口 -->
+    <div class="chat-container" id="chat"></div>
+
+    <!-- 输入区 -->
+    <div class="input-area">
+      <textarea id="question" placeholder="请输入你的问题..."></textarea>
+      <button onclick="askModel()">发送</button>
     </div>
   </div>
 
-  <footer>
-    © 2025 答而有据 | 基于大模型与知识增强的智能问答平台
-  </footer>
-
   <script>
+    const chat = document.getElementById("chat");
+
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.className = "message " + sender;
+      msg.innerText = text;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight; // 自动滚动到底部
+    }
+
     async function askModel() {
-      const question = document.getElementById("question").value;
-      const responseBox = document.getElementById("response");
-      responseBox.innerText = "正在思考中，请稍候...";
+      const question = document.getElementById("question").value.trim();
+      if (!question) return;
+
+      addMessage(question, "user");
+      document.getElementById("question").value = "";
+
+      addMessage("正在思考中，请稍候...", "bot");
 
       try {
-        // ⚠️ 替换为你自己的大模型 API
+        // ⚠️ 这里换成你自己的大模型 API
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer YOUR_API_KEY" // ← 这里换成你自己的 API key
+            "Authorization": "Bearer YOUR_API_KEY"
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
-            messages: [{role: "user", content: question}],
+            messages: [{ role: "user", content: question }],
             temperature: 0.7
           })
         });
 
         const data = await res.json();
-        if (data.choices && data.choices.length > 0) {
-          responseBox.innerText = data.choices[0].message.content;
-        } else {
-          responseBox.innerText = "出错了，请检查 API 响应。";
-        }
+        const botReply = data.choices?.[0]?.message?.content || "出错了，请检查 API 响应。";
+
+        // 替换“正在思考中...”为实际回答
+        chat.lastChild.innerText = botReply;
       } catch (err) {
-        responseBox.innerText = "请求失败：" + err.message;
+        chat.lastChild.innerText = "请求失败：" + err.message;
       }
     }
   </script>

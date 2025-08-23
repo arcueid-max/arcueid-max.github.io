@@ -9,57 +9,55 @@
       font-family: "Segoe UI", Arial, sans-serif;
       height: 100vh;
       display: flex;
-      background: #f4f6f8;
+      background: #f7f8fa;
+      color: #333;
     }
 
     /* 左侧导航栏 */
     .sidebar {
-      width: 250px;
+      width: 200px;
       background: #202123;
       color: white;
       display: flex;
       flex-direction: column;
-      padding: 15px;
+      padding: 20px 15px;
     }
     .sidebar h2 {
       font-size: 18px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       color: #10a37f;
+      text-align: center;
     }
     .sidebar button {
       background: #10a37f;
       border: none;
       color: white;
       padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
       cursor: pointer;
       transition: background 0.3s;
       font-size: 14px;
     }
-    .sidebar button:hover {
-      background: #0e8c6b;
-    }
+    .sidebar button:hover { background: #0e8c6b; }
     .sidebar .nav {
       margin-bottom: 20px;
     }
     .sidebar .nav a {
-      color: #ddd;
+      color: #ccc;
       text-decoration: none;
-      padding: 8px;
+      padding: 10px;
       border-radius: 6px;
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
       transition: background 0.3s;
     }
-    .sidebar .nav a:hover {
-      background: #2a2b32;
-      color: white;
-    }
+    .sidebar .nav a:hover { background: #2a2b32; color: white; }
     .sidebar h3 {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #bbb;
+      font-size: 13px;
+      margin: 15px 0 10px;
+      color: #aaa;
     }
     .history {
       flex: 1;
@@ -67,7 +65,7 @@
     }
     .history-item {
       padding: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       border-radius: 6px;
       background: #2a2b32;
       color: #ccc;
@@ -88,17 +86,20 @@
     }
 
     .intro {
-      padding: 20px;
-      border-bottom: 1px solid #ddd;
+      padding: 25px 30px;
+      border-bottom: 1px solid #e0e0e0;
       background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .intro h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 26px;
+      margin-bottom: 8px;
+      color: #202123;
     }
     .intro p {
-      color: #666;
+      color: #555;
       font-size: 15px;
+      line-height: 1.6;
     }
 
     /* 聊天窗口 */
@@ -106,62 +107,71 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #ececec;
-      padding: 20px;
+      background: #f7f8fa;
+      padding: 25px 40px;
       overflow-y: auto;
     }
     .message {
       max-width: 70%;
       padding: 12px 16px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      line-height: 1.5;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      line-height: 1.6;
       font-size: 15px;
       white-space: pre-wrap;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.3s forwards;
     }
     .user {
       align-self: flex-end;
       background: #10a37f;
       color: white;
-      border-bottom-right-radius: 2px;
+      border-bottom-right-radius: 4px;
     }
     .bot {
       align-self: flex-start;
       background: white;
       border: 1px solid #ddd;
-      border-bottom-left-radius: 2px;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* 输入区 */
     .input-area {
       display: flex;
-      padding: 15px;
+      padding: 15px 20px;
       border-top: 1px solid #ddd;
       background: #fff;
+      align-items: center;
     }
     textarea {
       flex: 1;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 12px 15px;
+      border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 14px;
       resize: none;
       height: 50px;
+      line-height: 1.4;
     }
     button.send-btn {
-      margin-left: 10px;
-      padding: 0 20px;
+      margin-left: 12px;
+      padding: 0 24px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #10a37f;
       color: white;
       font-size: 15px;
+      font-weight: 500;
       cursor: pointer;
       transition: background 0.3s;
+      height: 50px;
     }
-    button.send-btn:hover {
-      background: #0e8c6b;
-    }
+    button.send-btn:hover { background: #0e8c6b; }
   </style>
 </head>
 <body>
@@ -187,7 +197,7 @@
     <!-- 项目介绍 -->
     <div class="intro">
       <h1>欢迎来到答而有据</h1>
-      <p>这是一个基于大模型和RAG技术的智能问答学习平台，旨在让知识问答更加精准、有据可依。</p>
+      <p>这是一个基于大模型和RAG技术的智能问答学习平台，旨在让知识问答更加精准、有据可依。您可以直接在下方与模型进行交互，或浏览我们的FAQ与项目进展。</p>
     </div>
 
     <!-- 聊天窗口 -->
@@ -195,7 +205,7 @@
 
     <!-- 输入区 -->
     <div class="input-area">
-      <textarea id="question" placeholder="请输入你的问题..."></textarea>
+      <textarea id="question" placeholder="请输入你的问题...(Enter发送, Shift+Enter换行)"></textarea>
       <button class="send-btn" onclick="askModel()">发送</button>
     </div>
   </div>
@@ -203,6 +213,7 @@
   <script>
     const chat = document.getElementById("chat");
     const historyContainer = document.getElementById("history");
+    const textarea = document.getElementById("question");
     let chatHistory = [];
     let currentChat = [];
 
@@ -211,21 +222,20 @@
       msg.className = "message " + sender;
       msg.innerText = text;
       chat.appendChild(msg);
-      chat.scrollTop = chat.scrollHeight; // 自动滚动到底部
+      chat.scrollTop = chat.scrollHeight;
       currentChat.push({ role: sender, content: text });
     }
 
     async function askModel() {
-      const question = document.getElementById("question").value.trim();
+      const question = textarea.value.trim();
       if (!question) return;
 
       addMessage(question, "user");
-      document.getElementById("question").value = "";
+      textarea.value = "";
 
       addMessage("正在思考中，请稍候...", "bot");
 
       try {
-        // ⚠️ 这里换成你自己的大模型 API
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -271,6 +281,14 @@
         addMessage(msg.content, msg.role);
       }
     }
+
+    // 回车发送逻辑
+    textarea.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        askModel();
+      }
+    });
   </script>
 </body>
 </html>

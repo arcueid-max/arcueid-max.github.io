@@ -1,218 +1,106 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>答而有据 - 智能问答平台</title>
+  <meta charset="UTF-8" />
+  <title>FastAPI 聊天</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f5f7fa;
-      color: #333;
-    }
-
-    header {
-      background: #4a90e2;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      color: #4a90e2;
-    }
-
-    p {
-      line-height: 1.6;
-    }
-
-    #chatBox {
-      height: 400px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 20px 0;
-      overflow-y: auto;
-      background: #fafafa;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .message {
-      max-width: 70%;
-      padding: 10px 15px;
-      border-radius: 15px;
-      line-height: 1.5;
-      word-wrap: break-word;
-    }
-
-    .user {
-      align-self: flex-end;
-      background: #4a90e2;
-      color: white;
-      border-bottom-right-radius: 0;
-    }
-
-    .bot {
-      align-self: flex-start;
-      background: #e5e5ea;
-      color: black;
-      border-bottom-left-radius: 0;
-    }
-
-    #inputBox {
-      display: flex;
-      gap: 10px;
-    }
-
-    #userInput {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-
-    #sendBtn {
-      padding: 10px 15px;
-      border: none;
-      background: #4a90e2;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    #sendBtn:hover {
-      background: #357abd;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; }
+    .msg { margin: 5px 0; }
+    .user { font-weight: bold; color: blue; }
+    .bot { font-weight: bold; color: green; }
   </style>
 </head>
 <body>
-  <header>答而有据 - 智能问答平台</header>
+  <h2>聊天界面</h2>
+  <div id="chat"></div>
+  <input id="input" type="text" placeholder="输入消息..." style="width:80%">
+  <button onclick="send()">发送</button>
 
-  <div class="container">
-    <h2>项目背景</h2>
-    <p>
-      本平台基于 RAG（检索增强生成）和大模型技术，旨在为用户提供精准、可靠的智能问答服务。
-      结合领域知识库与先进的自然语言处理能力，我们可以在教育、科研和工业应用中提供智能化支持。
-    </p>
+  <script>
+    const chatBox = document.getElementById("chat");
+    const input = document.getElementById("input");
 
-    <h2>在线体验</h2>
-    <div id="chatBox"></div>
+    async function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
 
-    <div id="inputBox">
-      <input type="text" id="userInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter') sendMessage()">
-      <button type="button" id="sendBtn" onclick="sendMessage()">发送</button>
-    </div>
-  </div>
+      // 显示用户消息
+      const userMsg = document.createElement("div");
+      userMsg.className = "msg user";
+      userMsg.textContent = "你: " + text;
+      chatBox.appendChild(userMsg);
 
- <script>
-async function sendMessage() {
-  const input = document.getElementById("userInput");
-  const chatBox = document.getElementById("chatBox");
-  const question = input.value.trim();
-  if (!question) return;
+      // 创建机器人消息容器
+      const botMsg = document.createElement("div");
+      botMsg.className = "msg bot";
+      botMsg.innerHTML = "<strong>机器人:</strong>";
+      chatBox.appendChild(botMsg);
 
-  appendMessage("user", question);
-  input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-  // 创建一个机器人消息占位
-  const botMsg = appendMessage("bot", "");
+      // 请求后端流式接口
+      const response = await fetch("/chat_stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
 
-  try {
-    const resp = await fetch("http://127.0.0.1:8000/chat_stream", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: question })
-    });
-    if (!resp.body) throw new Error("服务器没有返回流");
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
 
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder("utf-8");
+      let buffer = ""; // 用于存储未完整段落
+      let paragraphElem = null;
 
-    // —— 关键：基于状态机的 <think> 过滤 —— //
-    let buffer = "";      // 输入缓冲
-    let visible = "";     // 已清洗、可展示的文本
-    let inThink = false;  // 当前是否处于 <think> 块中
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+        let chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
 
-      buffer += decoder.decode(value, { stream: true });
+        // 去掉思考块
+        let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
 
-      let progressed = true;
-      while (progressed) {
-        progressed = false;
+        // 拆分段落
+        let parts = clean.split(/\n\s*\n/);
 
-        if (!inThink) {
-          const start = buffer.indexOf("<think>");
-          if (start !== -1) {
-            // 追加 <think> 之前的可显示内容
-            visible += buffer.slice(0, start);
-            // 丢弃起始标签
-            buffer = buffer.slice(start + "<think>".length);
-            inThink = true;
-            progressed = true;
-          } else {
-            // 没有发现新的 <think>，全部都是可显示内容
-            visible += buffer;
-            buffer = "";
+        // 最后一个可能是不完整段落
+        buffer = parts.pop();
+
+        // 渲染完整段落
+        for (let p of parts) {
+          if (p.trim()) {
+            let pElem = document.createElement("p");
+            pElem.textContent = p.trim();
+            botMsg.appendChild(pElem);
           }
         }
 
-        if (inThink) {
-          const end = buffer.indexOf("</think>");
-          if (end !== -1) {
-            // 丢弃整段思考块（直到闭合标签）
-            buffer = buffer.slice(end + "</think>".length);
-            inThink = false;
-            progressed = true;
-          } else {
-            // 仍在思考块内部：为了识别可能跨 chunk 的闭合标签，保留尾部少量字符即可
-            if (buffer.length > 16) buffer = buffer.slice(-16);
-            // 等下一段数据
+        // 渲染当前未完成的段落（覆盖更新）
+        if (buffer.trim()) {
+          if (!paragraphElem) {
+            paragraphElem = document.createElement("p");
+            botMsg.appendChild(paragraphElem);
           }
+          paragraphElem.textContent = buffer.trim();
         }
+
+        chatBox.scrollTop = chatBox.scrollHeight;
       }
 
-      // 实时渲染
-      botMsg.textContent = visible;
+      // 最后处理残余
+      if (buffer.trim()) {
+        if (!paragraphElem) {
+          paragraphElem = document.createElement("p");
+          botMsg.appendChild(paragraphElem);
+        }
+        paragraphElem.textContent = buffer.trim();
+      }
+
       chatBox.scrollTop = chatBox.scrollHeight;
     }
-
-    // 保险：收尾再清洗一次（应对少数非标准思考格式）
-    botMsg.textContent = botMsg.textContent
-      .replace(/<think>[\s\S]*?<\/think>/g, "")
-      .replace(/```thinking[\s\S]*?```/gi, "")     // 某些模型会用代码块包“thinking”
-      .replace(/【思考】[\s\S]*?(?=【|$)/g, "");     // 偶见的“【思考】...”
-  } catch (e) {
-    botMsg.textContent = "❌ 出错: " + e.message;
-  }
-}
-
-function appendMessage(role, text) {
-  const chatBox = document.getElementById("chatBox");
-  const msg = document.createElement("div");
-  msg.className = "message " + (role === "user" ? "user" : "bot");
-  msg.textContent = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-  return msg;
-}
-</script>
+  </script>
 </body>
 </html>

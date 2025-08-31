@@ -47,52 +47,45 @@
     <button onclick="sendMessage()">发送</button>
   </div>
 
-  <script>
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
-    input.value = "";
+ <script>
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value;
+  input.value = "";
 
-    const chatBox = document.getElementById("chat-box");
+  const chatBox = document.getElementById("chat-box");
 
-    // 显示用户消息
-    const userMsg = document.createElement("div");
-    userMsg.textContent = "你: " + message;
-    chatBox.appendChild(userMsg);
+  const userMsg = document.createElement("div");
+  userMsg.textContent = "你: " + message;
+  chatBox.appendChild(userMsg);
 
-    // 显示机器人消息（流式）
-    const botMsg = document.createElement("div");
-    botMsg.textContent = "Bot: ";
-    chatBox.appendChild(botMsg);
+  const botMsg = document.createElement("div");
+  botMsg.textContent = "Bot: ";
+  chatBox.appendChild(botMsg);
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/chat_stream", {
-        method: "POST",
-        body: message
-      });
+  const response = await fetch("http://127.0.0.1:8000/chat_stream", {
+    method: "POST",
+    body: message
+  });
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8");
 
-      let buffer = ""; // 缓冲区
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+  // ✅ 在这里用缓冲区清理 <think> 标签
+  let buffer = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
 
-        let txt = decoder.decode(value, { stream: true });
-        buffer += txt;
+    let txt = decoder.decode(value, { stream: true });
+    buffer += txt;
 
-        // 去掉 <think> ... </think>
-        let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
-        botMsg.textContent = "Bot: " + clean;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    } catch (err) {
-      botMsg.textContent = "Bot: [连接出错]";
-      console.error("❌ 出错:", err);
-    }
+    // 去掉 <think> ... </think>
+    let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
+    botMsg.textContent = "Bot: " + clean;
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
-  </script>
+}
+</script>
 </body>
 </html>

@@ -119,56 +119,100 @@
     </div>
   </div>
 
-  <script>
-    let messages = [
-  { role: "system", content: "你是一个有帮助的智能助手。" }
-];
+ <script>
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const question = input.value.trim();
+  if (!question) return;
 
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
-    input.value = "";
+  appendMessage("user", question);
+  input.value = "";
 
-    const chatBox = document.getElementById("chat-box");
+  // 创建一个机器人消息占位
+  const botMsg = appendMessage("bot", "");
 
-    // 显示用户消息
-    const userMsg = document.createElement("div");
-    userMsg.textContent = "你: " + message;
-    chatBox.appendChild(userMsg);
+  try {
+    const resp = await fetch("http://127.0.0.1:8000/chat_stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: question })
+    });
+    if (!resp.body) throw new Error("服务器没有返回流");
 
-    // 显示机器人消息（流式）
-    const botMsg = document.createElement("div");
-    botMsg.textContent = "Bot: ";
-    chatBox.appendChild(botMsg);
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder("utf-8");
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/chat_stream", {
-        method: "POST",
-        body: message
-      });
+    // —— 关键：基于状态机的 <think> 过滤 —— //
+    let buffer = "";      // 输入缓冲
+    let visible = "";     // 已清洗、可展示的文本
+    let inThink = false;  // 当前是否处于 <think> 块中
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-      let buffer = ""; // 缓冲区
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      buffer += decoder.decode(value, { stream: true });
 
-        let txt = decoder.decode(value, { stream: true });
-        buffer += txt;
+      let progressed = true;
+      while (progressed) {
+        progressed = false;
 
-        // 去掉 <think> ... </think>
-        let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
-        botMsg.textContent = "Bot: " + clean;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        if (!inThink) {
+          const start = buffer.indexOf("<think>");
+          if (start !== -1) {
+            // 追加 <think> 之前的可显示内容
+            visible += buffer.slice(0, start);
+            // 丢弃起始标签
+            buffer = buffer.slice(start + "<think>".length);
+            inThink = true;
+            progressed = true;
+          } else {
+            // 没有发现新的 <think>，全部都是可显示内容
+            visible += buffer;
+            buffer = "";
+          }
+        }
+
+        if (inThink) {
+          const end = buffer.indexOf("</think>");
+          if (end !== -1) {
+            // 丢弃整段思考块（直到闭合标签）
+            buffer = buffer.slice(end + "</think>".length);
+            inThink = false;
+            progressed = true;
+          } else {
+            // 仍在思考块内部：为了识别可能跨 chunk 的闭合标签，保留尾部少量字符即可
+            if (buffer.length > 16) buffer = buffer.slice(-16);
+            // 等下一段数据
+          }
+        }
       }
-    } catch (err) {
-      botMsg.textContent = "Bot: [连接出错]";
-      console.error("❌ 出错:", err);
+
+      // 实时渲染
+      botMsg.textContent = visible;
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    // 保险：收尾再清洗一次（应对少数非标准思考格式）
+    botMsg.textContent = botMsg.textContent
+      .replace(/<think>[\s\S]*?<\/think>/g, "")
+      .replace(/```thinking[\s\S]*?```/gi, "")     // 某些模型会用代码块包“thinking”
+      .replace(/【思考】[\s\S]*?(?=【|$)/g, "");     // 偶见的“【思考】...”
+  } catch (e) {
+    botMsg.textContent = "❌ 出错: " + e.message;
   }
+}
+
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = "message " + (role === "user" ? "user" : "bot");
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
+}
 </script>
 </body>
 </html>

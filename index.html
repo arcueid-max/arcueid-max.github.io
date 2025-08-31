@@ -1,77 +1,98 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>FastAPI 聊天</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; }
-    .msg { margin: 5px 0; }
-    .user { font-weight: bold; color: blue; }
-    .bot { font-weight: bold; color: green; }
-    .bot-content { margin-left: 1em; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+    #chat-box div {
+      margin: 5px 0;
+    }
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    #user-input {
+      flex: 1;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h2>聊天界面</h2>
-  <div id="chat"></div>
-  <input id="input" type="text" placeholder="输入消息..." style="width:80%">
-  <button onclick="send()">发送</button>
+  <div id="chat-box"></div>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="输入消息..." />
+    <button onclick="sendMessage()">发送</button>
+  </div>
 
   <script>
-    const chatBox = document.getElementById("chat");
-    const input = document.getElementById("input");
+  async function sendMessage() {
+    const input = document.getElementById("user-input");
+    const message = input.value.trim();
+    if (!message) return;
+    input.value = "";
 
-    async function send() {
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = "";
+    const chatBox = document.getElementById("chat-box");
 
-      // 用户消息
-      const userMsg = document.createElement("div");
-      userMsg.className = "msg user";
-      userMsg.textContent = "你: " + text;
-      chatBox.appendChild(userMsg);
+    // 显示用户消息
+    const userMsg = document.createElement("div");
+    userMsg.textContent = "你: " + message;
+    chatBox.appendChild(userMsg);
 
-      // 机器人消息容器
-      const botMsg = document.createElement("div");
-      botMsg.className = "msg bot";
-      botMsg.innerHTML = "<strong>机器人:</strong><div class='bot-content'></div>";
-      const botContent = botMsg.querySelector(".bot-content");
-      chatBox.appendChild(botMsg);
+    // 显示机器人消息（流式）
+    const botMsg = document.createElement("div");
+    botMsg.textContent = "Bot: ";
+    chatBox.appendChild(botMsg);
 
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      // 请求流式接口
-      const response = await fetch("/chat_stream", {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/chat_stream", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
+        body: message
       });
 
       const reader = response.body.getReader();
-      const decoder = new TextDecoder();
+      const decoder = new TextDecoder("utf-8");
 
-      let buffer = "";
-
+      let buffer = ""; // 缓冲区
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        let chunk = decoder.decode(value, { stream: true });
-        buffer += chunk;
+        let txt = decoder.decode(value, { stream: true });
+        buffer += txt;
 
-        // 去掉 <think>...</think>
+        // 去掉 <think> ... </think>
         let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
-
-        // 用 marked 渲染 Markdown
-        botContent.innerHTML = marked.parse(clean);
-
+        botMsg.textContent = "Bot: " + clean;
         chatBox.scrollTop = chatBox.scrollHeight;
       }
+    } catch (err) {
+      botMsg.textContent = "Bot: [连接出错]";
+      console.error("❌ 出错:", err);
     }
+  }
   </script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </html>

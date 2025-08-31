@@ -130,42 +130,53 @@
       const question = input.value.trim();
       if (!question) return;
 
-      // 显示用户输入
       appendMessage("user", question);
 
-      // 清空输入框
       input.value = "";
 
-      // 保存到历史
       messages.push({ role: "user", content: question });
 
       try {
-        const response = await fetch("https://你的项目名.vercel.app/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages })
-        });
+        const response = await fetch("http://127.0.0.1:8000/chat", {  
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: question })  
+      });
 
-        const data = await response.json();
-        const answer = data.choices[0].message.content;
-
-        appendMessage("bot", answer);
-
-        // 保存到历史
-        messages.push({ role: "assistant", content: answer });
-
-      } catch (error) {
-        appendMessage("bot", "❌ 出错: " + error.message);
+      if (!response.body) {
+        throw new Error("服务器没有返回流");
       }
-    }
 
-    function appendMessage(role, text) {
-      const chatBox = document.getElementById("chatBox");
-      const msg = document.createElement("div");
-      msg.className = "message " + (role === "user" ? "user" : "bot");
-      msg.textContent = text;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      const botMsg = appendMessage("bot", "");
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+ 
+        botMsg.textContent += chunk;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      messages.push({ role: "assistant", content: botMsg.textContent });
+
+    } catch (error) {
+      appendMessage("bot", "❌ 出错: " + error.message);
+    }
+  }
+
+  function appendMessage(role, text) {
+    const chatBox = document.getElementById("chatBox");
+    const msg = document.createElement("div");
+    msg.className = "message " + (role === "user" ? "user" : "bot");
+    msg.textContent = text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return msg; //
     }
   </script>
 </body>

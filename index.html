@@ -48,51 +48,48 @@
   </div>
 
   <script>
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
-    input.value = "";
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const question = input.value.trim();
+  if (!question) return;
 
-    const chatBox = document.getElementById("chat-box");
+  appendMessage("user", question);
+  input.value = "";
 
-    // 显示用户消息
-    const userMsg = document.createElement("div");
-    userMsg.textContent = "你: " + message;
-    chatBox.appendChild(userMsg);
+  try {
+    const resp = await fetch("http://127.0.0.1:8000/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: question })
+    });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
 
-    // 显示机器人消息（流式）
-    const botMsg = document.createElement("div");
-    botMsg.textContent = "Bot: ";
-    chatBox.appendChild(botMsg);
+    // 如果你的后端返回 {"response": "..."} 用 resp.json()；若返回纯文本用 resp.text()
+    const data = await resp.json();
+    let answer = (typeof data === "string") ? data : data.response;
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/chat_stream", {
-        method: "POST",
-        body: message
-      });
+    // 一次性彻底清洗
+    answer = answer
+      .replace(/<think>[\s\S]*?<\/think>/g, "")
+      .replace(/```thinking[\s\S]*?```/gi, "")
+      .replace(/【思考】[\s\S]*?(?=【|$)/g, "");
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-
-      let buffer = ""; // 缓冲区
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        let txt = decoder.decode(value, { stream: true });
-        buffer += txt;
-
-        // 去掉 <think> ... </think>
-        let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
-        botMsg.textContent = "Bot: " + clean;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    } catch (err) {
-      botMsg.textContent = "Bot: [连接出错]";
-      console.error("❌ 出错:", err);
-    }
+    appendMessage("bot", answer);
+  } catch (e) {
+    appendMessage("bot", "❌ 出错: " + e.message);
   }
-  </script>
+}
+
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = "message " + (role === "user" ? "user" : "bot");
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
+}
+</script>
 </body>
 </html>

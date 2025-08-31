@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>FastAPI 聊天</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; }
     .msg { margin: 5px 0; }
     .user { font-weight: bold; color: blue; }
     .bot { font-weight: bold; color: green; }
+    .bot-content { margin-left: 1em; }
   </style>
 </head>
 <body>
@@ -26,21 +28,22 @@
       if (!text) return;
       input.value = "";
 
-      // 显示用户消息
+      // 用户消息
       const userMsg = document.createElement("div");
       userMsg.className = "msg user";
       userMsg.textContent = "你: " + text;
       chatBox.appendChild(userMsg);
 
-      // 创建机器人消息容器
+      // 机器人消息容器
       const botMsg = document.createElement("div");
       botMsg.className = "msg bot";
-      botMsg.innerHTML = "<strong>机器人:</strong>";
+      botMsg.innerHTML = "<strong>机器人:</strong><div class='bot-content'></div>";
+      const botContent = botMsg.querySelector(".bot-content");
       chatBox.appendChild(botMsg);
 
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // 请求后端流式接口
+      // 请求流式接口
       const response = await fetch("/chat_stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,8 +53,7 @@
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
 
-      let buffer = ""; // 用于存储未完整段落
-      let paragraphElem = null;
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -60,46 +62,14 @@
         let chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
 
-        // 去掉思考块
+        // 去掉 <think>...</think>
         let clean = buffer.replace(/<think>[\s\S]*?<\/think>/g, "");
 
-        // 拆分段落
-        let parts = clean.split(/\n\s*\n/);
-
-        // 最后一个可能是不完整段落
-        buffer = parts.pop();
-
-        // 渲染完整段落
-        for (let p of parts) {
-          if (p.trim()) {
-            let pElem = document.createElement("p");
-            pElem.textContent = p.trim();
-            botMsg.appendChild(pElem);
-          }
-        }
-
-        // 渲染当前未完成的段落（覆盖更新）
-        if (buffer.trim()) {
-          if (!paragraphElem) {
-            paragraphElem = document.createElement("p");
-            botMsg.appendChild(paragraphElem);
-          }
-          paragraphElem.textContent = buffer.trim();
-        }
+        // 用 marked 渲染 Markdown
+        botContent.innerHTML = marked.parse(clean);
 
         chatBox.scrollTop = chatBox.scrollHeight;
       }
-
-      // 最后处理残余
-      if (buffer.trim()) {
-        if (!paragraphElem) {
-          paragraphElem = document.createElement("p");
-          botMsg.appendChild(paragraphElem);
-        }
-        paragraphElem.textContent = buffer.trim();
-      }
-
-      chatBox.scrollTop = chatBox.scrollHeight;
     }
   </script>
 </body>

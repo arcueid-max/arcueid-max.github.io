@@ -1,266 +1,174 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <title>FastAPI Chat</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- 谷歌字体 -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>答而有据 - 智能问答平台</title>
   <style>
-    :root {
-      --bg: #1e1f20;
-      --bg-panel: #252627;
-      --accent: #0a84ff;
-      --text: #e5e5e5;
-      --text-dim: #9fa0a3;
-      --user: #0a84ff;
-      --bot: #2e2f31;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font-family: "Inter", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      height: 100vh;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    header {
+      background: #4a90e2;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #4a90e2;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    #chatBox {
+      height: 400px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      overflow-y: auto;
+      background: #fafafa;
       display: flex;
       flex-direction: column;
+      gap: 10px;
     }
 
-    #chat-box {
-      flex: 1;
-      padding: 24px 16px 100px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
-
-    /* 消息气泡 */
     .message {
-      max-width: 75%;
-      margin: 8px 0;
-      padding: 12px 14px;
-      border-radius: 18px;
-      line-height: 1.4;
-      word-break: break-word;
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      line-height: 1.5;
+      word-wrap: break-word;
     }
 
-    .message.user {
-      background: var(--user);
-      color: #fff;
+    .user {
       align-self: flex-end;
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
+      background: #4a90e2;
+      color: white;
+      border-bottom-right-radius: 0;
     }
 
-    .message.bot {
-      background: var(--bot);
-      border-bottom-left-radius: 4px;
+    .bot {
+      align-self: flex-start;
+      background: #e5e5ea;
+      color: black;
+      border-bottom-left-radius: 0;
     }
 
-    /* 头像 */
-    .avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      font-size: 14px;
+    #inputBox {
       display: flex;
-      align-items: center;
-      justify-content: center;
+      gap: 10px;
     }
 
-    .avatar.user {
-      background: var(--user);
-      color: #fff;
-    }
-
-    .avatar.bot {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    /* 输入栏 */
-    #input-area {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--bg-panel);
-      border-top: 1px solid #3a3b3d;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #user-input {
+    #userInput {
       flex: 1;
-      background: #3a3b3d;
-      border: none;
-      border-radius: 20px;
-      padding: 10px 16px;
-      color: var(--text);
-      font-size: 15px;
-      outline: none;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
     }
 
-    #user-input::placeholder {
-      color: var(--text-dim);
-    }
-
-    button {
-      background: var(--accent);
+    #sendBtn {
+      padding: 10px 15px;
       border: none;
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #4a90e2;
+      color: white;
+      border-radius: 10px;
       cursor: pointer;
-      transition: transform .15s;
+      font-size: 16px;
     }
 
-    button:hover {
-      transform: scale(1.08);
-    }
-
-    /* 发送图标 SVG */
-    .send-icon {
-      width: 18px;
-      height: 18px;
-      fill: #fff;
-    }
-
-    /* 加载动画 */
-    .loading {
-      display: flex;
-      gap: 4px;
-    }
-
-    .loading span {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--text-dim);
-      animation: pulse 1.2s infinite;
-    }
-
-    .loading span:nth-child(2) {
-      animation-delay: .2s;
-    }
-
-    .loading span:nth-child(3) {
-      animation-delay: .4s;
-    }
-
-    @keyframes pulse {
-      0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
-      40% { transform: scale(1.2); opacity: 1; }
-    }
-
-    /* 响应式 */
-    @media (max-width: 600px) {
-      .message {
-        max-width: 85%;
-      }
+    #sendBtn:hover {
+      background: #357abd;
     }
   </style>
 </head>
 <body>
-  <div id="chat-box"></div>
+  <header>答而有据 - 智能问答平台</header>
 
-  <div id="input-area">
-    <input
-      id="user-input"
-      type="text"
-      placeholder="输入消息，按 Enter 发送..."
-      autocomplete="off"
-    />
-    <button onclick="sendMessage()" title="发送">
-      <svg class="send-icon" viewBox="0 0 24 24">
-        <path d="M2 21l21-9L2 3v7l15 2-15 2z"/>
-      </svg>
-    </button>
+  <div class="container">
+    <h2>项目背景</h2>
+    <p>
+      本平台基于 RAG（检索增强生成）和大模型技术，旨在为用户提供精准、可靠的智能问答服务。
+      结合领域知识库与先进的自然语言处理能力，我们可以在教育、科研和工业应用中提供智能化支持。
+    </p>
+
+    <h2>在线体验</h2>
+    <div id="chatBox"></div>
+
+    <div id="inputBox">
+      <input type="text" id="userInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter') sendMessage()">
+      <button type="button" id="sendBtn" onclick="sendMessage()">发送</button>
+    </div>
   </div>
 
   <script>
-    const chatBox = document.getElementById("chat-box");
-    const input = document.getElementById("user-input");
+    let messages = [
+  { role: "system", content: "你是一个有帮助的智能助手。" }
+];
 
-    // 发送消息
-    async function sendMessage() {
-      const question = input.value.trim();
-      if (!question) return;
-      appendMessage("user", question);
-      input.value = "";
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const question = input.value.trim();
+  if (!question) return;
 
-      const loadingBubble = appendMessage("bot", ""); // 占位
-      loadingBubble.innerHTML = `
-        <div class="avatar bot">A</div>
-        <div class="loading">
-          <span></span><span></span><span></span>
-        </div>
-      `;
+  // 显示用户消息
+  appendMessage("user", question);
 
-      try {
-        const resp = await fetch("http://127.0.0.1:8000/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: question })
-        });
-        if (!resp.ok) throw new Error("HTTP " + resp.status);
+  input.value = "";
 
-        const data = await resp.json();
-        let answer = (typeof data === "string") ? data : data.response;
-        answer = answer
-          .replace(/<think>[\s\S]*?<\/think>/g, "")
-          .replace(/```thinking[\s\S]*?```/gi, "")
-          .replace(/【思考】[\s\S]*?(?=【|$)/g, "");
+  messages.push({ role: "user", content: question });
 
-        loadingBubble.remove();
-        appendMessage("bot", answer);
-      } catch (e) {
-        loadingBubble.remove();
-        appendMessage("bot", "❌ 出错: " + e.message);
-      }
-    }
-
-    // 渲染消息
-    function appendMessage(role, text) {
-      const div = document.createElement("div");
-      div.className = "message " + role;
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar " + role;
-      avatar.textContent = role === "user" ? "U" : "A";
-
-      const body = document.createElement("div");
-      body.textContent = text;
-
-      div.appendChild(avatar);
-      div.appendChild(body);
-
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-      return div;
-    }
-
-    // Enter 发送
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+  try {
+    const response = await fetch("http://127.0.0.1:8000/chat_stream ", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: question })  // 这里发送 prompt
     });
-  </script>
+
+    if (!response.ok) {
+      throw new Error("HTTP 错误 " + response.status);
+    }
+
+    // 获取完整回答
+    const answer = await response.text();
+
+    appendMessage("bot", answer);
+
+    messages.push({ role: "assistant", content: answer });
+
+  } catch (error) {
+    appendMessage("bot", "❌ 出错: " + error.message);
+  }
+}
+
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = "message " + (role === "user" ? "user" : "bot");
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
+}
+</script>
 </body>
 </html>

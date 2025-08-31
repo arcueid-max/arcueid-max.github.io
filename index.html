@@ -121,63 +121,64 @@
 
   <script>
     let messages = [
-      { role: "system", content: "你是一个有帮助的智能助手。" }
-    ];
+  { role: "system", content: "你是一个有帮助的智能助手。" }
+];
 
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const chatBox = document.getElementById("chatBox");
-      const question = input.value.trim();
-      if (!question) return;
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const question = input.value.trim();
+  if (!question) return;
 
-      appendMessage("user", question);
+  // 显示用户消息
+  appendMessage("user", question);
 
-      input.value = "";
+  input.value = "";
 
-      messages.push({ role: "user", content: question });
+  messages.push({ role: "user", content: question });
 
-      try {
-        const response = await fetch("http://127.0.0.1:8000/chat_stream", {  
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: question })  
-      });
+  try {
+    const response = await fetch("http://127.0.0.1:8000/chat_stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: question })  // 这里发送 prompt
+    });
 
-      if (!response.body) {
-        throw new Error("服务器没有返回流");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-
-      const botMsg = appendMessage("bot", "");
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
- 
-        botMsg.textContent += chunk;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-
-      messages.push({ role: "assistant", content: botMsg.textContent });
-
-    } catch (error) {
-      appendMessage("bot", "❌ 出错: " + error.message);
+    if (!response.ok) {
+      throw new Error("HTTP 错误 " + response.status);
     }
+
+    // 获取完整回答
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    const botMsg = appendMessage("bot", "");   // 先占位
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      let txt = decoder.decode(value, { stream: true });
+      txt = txt.replace(/<think>.*?<\/think>/gs, "");  // 去掉思考块
+      botMsg.textContent += txt;
+      chatBox.scrollTop = chatBox.scrollHeight;   // 保持滚动到底
+    }
+
+    messages.push({ role: "assistant", content: answer });
+
+  } catch (error) {
+    appendMessage("bot", "❌ 出错: " + error.message);
   }
+}
 
-  function appendMessage(role, text) {
-    const chatBox = document.getElementById("chatBox");
-    const msg = document.createElement("div");
-    msg.className = "message " + (role === "user" ? "user" : "bot");
-    msg.textContent = text;
-    chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-    return msg; //
-    }
-  </script>
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = "message " + (role === "user" ? "user" : "bot");
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
+}
+</script>
 </body>
 </html>

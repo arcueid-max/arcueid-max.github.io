@@ -1,191 +1,294 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>答而有据 - 智能问答平台</title>
+  <meta charset="UTF-8">
+  <title>答而有据 - 智能问答学习平台</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      background-color: #f7f7f8;
+      font-family: "Segoe UI", Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      background: #f7f8fa;
       color: #333;
+    }
+
+    /* 左侧导航栏 */
+    .sidebar {
+      width: 200px;
+      background: #202123;
+      color: white;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      padding: 20px 15px;
     }
-
-    header {
-      background: #4a90e2;
-      color: white;
-      padding: 1rem;
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #10a37f;
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
+    }
+    .sidebar button {
+      background: #10a37f;
+      border: none;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 14px;
+    }
+    .sidebar button:hover { background: #0e8c6b; }
+    .sidebar .nav {
+      margin-bottom: 20px;
+    }
+    .sidebar .nav a {
+      color: #ccc;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .sidebar .nav a:hover { background: #2a2b32; color: white; }
+    .sidebar h3 {
+      font-size: 13px;
+      margin: 15px 0 10px;
+      color: #aaa;
+    }
+    .history {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .history-item {
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      background: #2a2b32;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .history-item:hover {
+      background: #3a3b42;
+      color: #fff;
     }
 
-    main {
+    /* 右侧主要区域 */
+    .main {
       flex: 1;
       display: flex;
-      overflow: hidden;
+      flex-direction: column;
     }
 
-    nav {
-      width: 220px;
+    .intro {
+      padding: 25px 30px;
+      border-bottom: 1px solid #e0e0e0;
       background: #fff;
-      border-right: 1px solid #ddd;
-      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .intro h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+      color: #202123;
+    }
+    .intro p {
+      color: #555;
+      font-size: 15px;
+      line-height: 1.6;
     }
 
-    nav h3 {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    nav ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    nav li {
-      padding: 0.5rem 0;
-      cursor: pointer;
-      color: #4a90e2;
-    }
-
+    /* 聊天窗口 */
     .chat-container {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #fefefe;
-    }
-
-    .messages {
-      flex: 1;
+      background: #f7f8fa;
+      padding: 25px 40px;
       overflow-y: auto;
-      padding: 1rem;
     }
-
     .message {
-      margin-bottom: 1rem;
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
       max-width: 70%;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      line-height: 1.6;
+      font-size: 15px;
       white-space: pre-wrap;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.3s forwards;
     }
-
     .user {
-      background: #4a90e2;
+      align-self: flex-end;
+      background: #10a37f;
       color: white;
-      margin-left: auto;
+      border-bottom-right-radius: 4px;
     }
-
     .bot {
-      background: #e9ecef;
-      color: #333;
-      margin-right: auto;
+      align-self: flex-start;
+      background: white;
+      border: 1px solid #ddd;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
+    /* 输入区 */
     .input-area {
       display: flex;
-      padding: 1rem;
+      padding: 15px 20px;
       border-top: 1px solid #ddd;
       background: #fff;
+      align-items: center;
     }
-
-    .input-area textarea {
+    textarea {
       flex: 1;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
       resize: none;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 0.6rem;
-      font-size: 1rem;
+      height: 50px;
+      line-height: 1.4;
     }
-
-    .input-area button {
-      margin-left: 0.6rem;
-      padding: 0.6rem 1.2rem;
+    button.send-btn {
+      margin-left: 12px;
+      padding: 0 24px;
       border: none;
-      border-radius: 6px;
-      background: #4a90e2;
+      border-radius: 10px;
+      background: #10a37f;
       color: white;
-      font-size: 1rem;
+      font-size: 15px;
+      font-weight: 500;
       cursor: pointer;
       transition: background 0.3s;
+      height: 50px;
     }
-
-    .input-area button:hover {
-      background: #357ABD;
-    }
+    button.send-btn:hover { background: #0e8c6b; }
   </style>
 </head>
 <body>
-  <header>📘 答而有据 - 智能问答学习平台</header>
-  <main>
-    <nav>
-      <h3>📂 功能导航</h3>
-      <ul>
-        <li onclick="alert('这里可以展示项目介绍')">项目介绍</li>
-        <li onclick="alert('这里可以展示知识库内容')">知识库</li>
-        <li onclick="alert('这里可以展示学习进度')">学习进度</li>
-        <li onclick="alert('这里可以展示团队信息')">团队信息</li>
-      </ul>
-    </nav>
+  <!-- 左侧导航 -->
+  <div class="sidebar">
+    <h2>答而有据</h2>
+    <button onclick="newChat()">➕ 新对话</button>
 
-    <div class="chat-container">
-      <div class="messages" id="messages">
-        <div class="message bot">你好 👋，我是答而有据的智能助手，可以帮你解答问题。</div>
-      </div>
-
-      <div class="input-area">
-        <textarea id="question" rows="2" placeholder="输入你的问题..."></textarea>
-        <button onclick="sendQuestion()">发送</button>
-      </div>
+    <div class="nav">
+      <a href="index.html">首页</a>
+      <a href="faq.html">FAQ</a>
+      <a href="progress.html">项目进展</a>
+      <a href="rag.html">知识增强</a>
+      <a href="contact.html">联系我们</a>
     </div>
-  </main>
+
+    <h3>对话历史</h3>
+    <div class="history" id="history"></div>
+  </div>
+
+  <!-- 右侧主要区域 -->
+  <div class="main">
+    <!-- 项目介绍 -->
+    <div class="intro">
+      <h1>欢迎来到答而有据</h1>
+      <p>这是一个基于大模型和RAG技术的智能问答学习平台，旨在让知识问答更加精准、有据可依。您可以直接在下方与模型进行交互，或浏览我们的FAQ与项目进展。</p>
+    </div>
+
+    <!-- 聊天窗口 -->
+    <div class="chat-container" id="chat"></div>
+
+    <!-- 输入区 -->
+    <div class="input-area">
+      <textarea id="question" placeholder="请输入你的问题...(Enter发送, Shift+Enter换行)"></textarea>
+      <button class="send-btn" onclick="askModel()">发送</button>
+    </div>
+  </div>
 
   <script>
-    async function sendQuestion() {
-      const input = document.getElementById("question");
-      const messagesDiv = document.getElementById("messages");
+    const chat = document.getElementById("chat");
+    const historyContainer = document.getElementById("history");
+    const textarea = document.getElementById("question");
+    let chatHistory = [];
+    let currentChat = [];
 
-      const question = input.value.trim();
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.className = "message " + sender;
+      msg.innerText = text;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+      currentChat.push({ role: sender, content: text });
+    }
+
+    async function askModel() {
+      const question = textarea.value.trim();
       if (!question) return;
 
-      // 显示用户消息
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.innerText = question;
-      messagesDiv.appendChild(userMsg);
+      addMessage(question, "user");
+      textarea.value = "";
 
-      // 清空输入框
-      input.value = "";
-
-      // 显示“正在思考...”
-      const botMsg = document.createElement("div");
-      botMsg.className = "message bot";
-      botMsg.innerText = "正在思考...";
-      messagesDiv.appendChild(botMsg);
-
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      addMessage("正在思考中，请稍候...", "bot");
 
       try {
-        // 发送到 Vercel 代理
-        const response = await fetch("https://你的-vercel-地址/api/chat", {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question })
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_API_KEY"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: question }],
+            temperature: 0.7
+          })
         });
 
-        const data = await response.json();
-        botMsg.innerText = data.choices[0].message.content;
+        const data = await res.json();
+        const botReply = data.choices?.[0]?.message?.content || "出错了，请检查 API 响应。";
 
-      } catch (error) {
-        botMsg.innerText = "❌ 出错了，请稍后再试。";
+        chat.lastChild.innerText = botReply;
+        currentChat.push({ role: "bot", content: botReply });
+      } catch (err) {
+        chat.lastChild.innerText = "请求失败：" + err.message;
       }
-
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
+
+    function newChat() {
+      if (currentChat.length > 0) {
+        const preview = currentChat[0].content.slice(0, 15) + "...";
+        const item = document.createElement("div");
+        item.className = "history-item";
+        item.innerText = preview;
+        item.onclick = () => loadChat(currentChat);
+        historyContainer.appendChild(item);
+
+        chatHistory.push(currentChat);
+      }
+      chat.innerHTML = "";
+      currentChat = [];
+    }
+
+    function loadChat(conversation) {
+      chat.innerHTML = "";
+      currentChat = conversation.slice();
+      for (let msg of conversation) {
+        addMessage(msg.content, msg.role);
+      }
+    }
+
+    // 回车发送逻辑
+    textarea.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        askModel();
+      }
+    });
   </script>
 </body>
 </html>

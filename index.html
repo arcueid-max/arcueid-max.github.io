@@ -272,28 +272,34 @@
       }
     }
 
-    function newChat() {
-      if (currentChat.length > 0) {
-        const preview = currentChat[0].content.slice(0, 15) + "...";
-        const item = document.createElement("div");
-        item.className = "history-item";
-        item.innerText = preview;
-        item.onclick = () => loadChat(currentChat);
-        historyContainer.appendChild(item);
+function newChat() {
+  if (currentChat.length > 0) {
+    // 显示预览
+    const preview = currentChat[0].content.slice(0, 15) + "...";
+    const item = document.createElement("div");
+    item.className = "history-item";
+    item.innerText = preview;
 
-        chatHistory.push(currentChat);
-      }
-      chat.innerHTML = "";
-      currentChat = [];
-    }
+    // 关键：保存一份拷贝，不是直接引用
+    const savedChat = JSON.parse(JSON.stringify(currentChat));
 
-    function loadChat(conversation) {
-      chat.innerHTML = "";
-      currentChat = conversation.slice();
-      for (let msg of conversation) {
-        addMessage(msg.content, msg.role);
-      }
-    }
+    item.onclick = () => loadChat(savedChat);
+    historyContainer.appendChild(item);
+
+    chatHistory.push(savedChat);
+  }
+  chat.innerHTML = "";
+  currentChat = [];
+}
+
+function loadChat(conversation) {
+  chat.innerHTML = "";
+  currentChat = JSON.parse(JSON.stringify(conversation)); // 再拷贝一份，避免修改历史
+  for (let msg of conversation) {
+    addMessage(msg.content, msg.role);
+  }
+}
+
 
     textarea.addEventListener("keydown", function(e) {
       if (e.key === "Enter" && !e.shiftKey) {

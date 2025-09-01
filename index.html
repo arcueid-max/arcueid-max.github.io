@@ -9,15 +9,15 @@
       font-family: "Segoe UI", Arial, sans-serif;
       height: 100vh;
       display: flex;
-      background: #f7f8fa;
-      color: #333;
+      background: #343541;
+      color: #ececec;
     }
 
     /* 左侧导航栏 */
     .sidebar {
-      width: 200px;
+      width: 240px;
       background: #202123;
-      color: white;
+      color: #ececec;
       display: flex;
       flex-direction: column;
       padding: 20px 15px;
@@ -40,9 +40,7 @@
       font-size: 14px;
     }
     .sidebar button:hover { background: #0e8c6b; }
-    .sidebar .nav {
-      margin-bottom: 20px;
-    }
+    .sidebar .nav { margin-bottom: 20px; }
     .sidebar .nav a {
       color: #ccc;
       text-decoration: none;
@@ -59,10 +57,7 @@
       margin: 15px 0 10px;
       color: #aaa;
     }
-    .history {
-      flex: 1;
-      overflow-y: auto;
-    }
+    .history { flex: 1; overflow-y: auto; }
     .history-item {
       padding: 8px;
       margin-bottom: 8px;
@@ -73,68 +68,70 @@
       font-size: 13px;
       transition: background 0.2s;
     }
-    .history-item:hover {
-      background: #3a3b42;
-      color: #fff;
-    }
+    .history-item:hover { background: #3a3b42; color: #fff; }
 
     /* 右侧主要区域 */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
+    .main { flex: 1; display: flex; flex-direction: column; }
 
+    /* 项目介绍 */
     .intro {
-      padding: 25px 30px;
-      border-bottom: 1px solid #e0e0e0;
-      background: #fff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      padding: 20px 30px;
+      border-bottom: 1px solid #3f4147;
+      background: #343541;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
-    .intro h1 {
-      font-size: 26px;
-      margin-bottom: 8px;
-      color: #202123;
-    }
-    .intro p {
-      color: #555;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+    .intro h1 { font-size: 22px; margin-bottom: 8px; color: #ececec; }
+    .intro p { color: #c5c5d2; font-size: 14px; line-height: 1.6; }
 
     /* 聊天窗口 */
     .chat-container {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #f7f8fa;
-      padding: 25px 40px;
+      background: #343541;
+      padding: 20px 40px;
       overflow-y: auto;
     }
-    .message {
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      animation: fadeIn 0.3s forwards;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .message-row.user { justify-content: flex-end; }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+    .avatar.bot { background: #10a37f; margin-right: 10px; }
+    .avatar.user { background: #3b82f6; margin-left: 10px; }
+    .bubble {
       max-width: 70%;
       padding: 12px 16px;
-      margin-bottom: 18px;
       border-radius: 14px;
       line-height: 1.6;
       font-size: 15px;
       white-space: pre-wrap;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeIn 0.3s forwards;
+      word-break: break-word;
     }
-    .user {
-      align-self: flex-end;
+    .bot .bubble {
+      background: #444654;
+      color: #ececec;
+      border-bottom-left-radius: 4px;
+    }
+    .user .bubble {
       background: #10a37f;
       color: white;
       border-bottom-right-radius: 4px;
-    }
-    .bot {
-      align-self: flex-start;
-      background: white;
-      border: 1px solid #ddd;
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     @keyframes fadeIn {
       to { opacity: 1; transform: translateY(0); }
@@ -144,19 +141,22 @@
     .input-area {
       display: flex;
       padding: 15px 20px;
-      border-top: 1px solid #ddd;
-      background: #fff;
+      border-top: 1px solid #3f4147;
+      background: #40414f;
       align-items: center;
     }
     textarea {
       flex: 1;
       padding: 12px 15px;
       border-radius: 10px;
-      border: 1px solid #ccc;
+      border: none;
+      outline: none;
       font-size: 14px;
       resize: none;
       height: 50px;
       line-height: 1.4;
+      background: #343541;
+      color: #ececec;
     }
     button.send-btn {
       margin-left: 12px;
@@ -194,16 +194,13 @@
 
   <!-- 右侧主要区域 -->
   <div class="main">
-    <!-- 项目介绍 -->
     <div class="intro">
       <h1>欢迎来到答而有据</h1>
-      <p>这是一个基于大模型和RAG技术的智能问答学习平台，旨在让知识问答更加精准、有据可依。您可以直接在下方与模型进行交互，或浏览我们的FAQ与项目进展。</p>
+      <p>这是一个基于大模型和RAG技术的智能问答学习平台。您可以直接在下方与模型进行交互。</p>
     </div>
 
-    <!-- 聊天窗口 -->
     <div class="chat-container" id="chat"></div>
 
-    <!-- 输入区 -->
     <div class="input-area">
       <textarea id="question" placeholder="请输入你的问题...(Enter发送, Shift+Enter换行)"></textarea>
       <button class="send-btn" onclick="askModel()">发送</button>
@@ -218,10 +215,26 @@
     let currentChat = [];
 
     function addMessage(text, sender) {
-      const msg = document.createElement("div");
-      msg.className = "message " + sender;
-      msg.innerText = text;
-      chat.appendChild(msg);
+      const row = document.createElement("div");
+      row.className = "message-row " + sender;
+
+      const avatar = document.createElement("div");
+      avatar.className = "avatar " + sender;
+      avatar.innerText = sender === "bot" ? "🤖" : "👤";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = text;
+
+      if (sender === "bot") {
+        row.appendChild(avatar);
+        row.appendChild(bubble);
+      } else {
+        row.appendChild(bubble);
+        row.appendChild(avatar);
+      }
+
+      chat.appendChild(row);
       chat.scrollTop = chat.scrollHeight;
       currentChat.push({ role: sender, content: text });
     }
@@ -233,7 +246,7 @@
       addMessage(question, "user");
       textarea.value = "";
 
-      addMessage("正在思考中，请稍候...", "bot");
+      addMessage("正在思考中...", "bot");
 
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -252,10 +265,10 @@
         const data = await res.json();
         const botReply = data.choices?.[0]?.message?.content || "出错了，请检查 API 响应。";
 
-        chat.lastChild.innerText = botReply;
+        chat.lastChild.querySelector(".bubble").innerText = botReply;
         currentChat.push({ role: "bot", content: botReply });
       } catch (err) {
-        chat.lastChild.innerText = "请求失败：" + err.message;
+        chat.lastChild.querySelector(".bubble").innerText = "请求失败：" + err.message;
       }
     }
 
@@ -282,7 +295,6 @@
       }
     }
 
-    // 回车发送逻辑
     textarea.addEventListener("keydown", function(e) {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();

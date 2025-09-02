@@ -222,96 +222,116 @@
     </div>
   </div>
 
-  <script>
-    const chatContainer = document.getElementById("chat-container");
-    const chatHistoryDiv = document.getElementById("chat-history");
-    const userInput = document.getElementById("user-input");
-    const sendButton = document.getElementById("send-button");
-    const chatTitle = document.getElementById("chat-title");
+<script>
+  const chatContainer = document.getElementById("chat-container");
+  const chatHistoryDiv = document.getElementById("chat-history");
+  const userInput = document.getElementById("user-input");
+  const sendButton = document.getElementById("send-button");
+  const chatTitle = document.getElementById("chat-title");
 
-    let chats = JSON.parse(localStorage.getItem("allChats")) || [];
-    let currentChatIndex = localStorage.getItem("currentChatIndex") || null;
+  let chats = JSON.parse(localStorage.getItem("allChats")) || [];
+  let currentChatIndex = localStorage.getItem("currentChatIndex") || null;
 
-    function renderMessages() {
-      chatContainer.innerHTML = "";
-      if (currentChatIndex === null || !chats[currentChatIndex]) return;
+  function renderMessages() {
+    chatContainer.innerHTML = "";
+    if (currentChatIndex === null || !chats[currentChatIndex]) return;
 
-      chats[currentChatIndex].messages.forEach(msg => {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("chat-message", msg.role);
+    chats[currentChatIndex].messages.forEach(msg => {
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("chat-message", msg.role);
 
-        const bubble = document.createElement("div");
-        bubble.classList.add("chat-bubble");
-        bubble.textContent = msg.content;
+      const bubble = document.createElement("div");
+      bubble.classList.add("chat-bubble");
+      bubble.textContent = msg.content;
 
-        messageDiv.appendChild(bubble);
-        chatContainer.appendChild(messageDiv);
-      });
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      chatTitle.textContent = chats[currentChatIndex].title || "新对话";
-    }
-
-    function renderHistory() {
-      chatHistoryDiv.innerHTML = "<h3>对话历史</h3>";
-      chats.forEach((chat, index) => {
-        const item = document.createElement("div");
-        item.classList.add("chat-item");
-        item.textContent = chat.title || "未命名对话";
-        item.onclick = () => {
-          currentChatIndex = index;
-          localStorage.setItem("currentChatIndex", currentChatIndex);
-          renderMessages();
-          renderHistory();
-        };
-        chatHistoryDiv.appendChild(item);
-      });
-    }
-
-    function addMessage(role, content) {
-      if (currentChatIndex === null) newChat();
-      const chat = chats[currentChatIndex];
-      chat.messages.push({ role, content });
-      if (!chat.title && role === "user") {
-        chat.title = content.slice(0, 12); // 用前几个字作为标题
-      }
-      localStorage.setItem("allChats", JSON.stringify(chats));
-      renderMessages();
-      renderHistory();
-    }
-
-    sendButton.addEventListener("click", () => {
-      const text = userInput.value.trim();
-      if (text) {
-        addMessage("user", text);
-        userInput.value = "";
-
-        // 模拟 AI 回复
-        setTimeout(() => {
-          addMessage("ai", "这是AI的示例回复（这里可以接入大模型API）。");
-        }, 500);
-      }
+      messageDiv.appendChild(bubble);
+      chatContainer.appendChild(messageDiv);
     });
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    chatTitle.textContent = chats[currentChatIndex].title || "新对话";
+  }
 
-    userInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendButton.click();
-      }
+  function renderHistory() {
+    chatHistoryDiv.innerHTML = "<h3>对话历史</h3>";
+    chats.forEach((chat, index) => {
+      const item = document.createElement("div");
+      item.classList.add("chat-item");
+      item.textContent = chat.title || "未命名对话";
+      item.onclick = () => {
+        currentChatIndex = index;
+        localStorage.setItem("currentChatIndex", currentChatIndex);
+        renderMessages();
+        renderHistory();
+      };
+      chatHistoryDiv.appendChild(item);
     });
+  }
 
-    function newChat() {
-      chats.push({ title: null, messages: [] });
-      currentChatIndex = chats.length - 1;
-      localStorage.setItem("allChats", JSON.stringify(chats));
-      localStorage.setItem("currentChatIndex", currentChatIndex);
-      renderMessages();
-      renderHistory();
+  function addMessage(role, content) {
+    if (currentChatIndex === null) newChat();
+    const chat = chats[currentChatIndex];
+    chat.messages.push({ role, content });
+    if (!chat.title && role === "user") {
+      chat.title = content.slice(0, 12);
     }
-
-    // 初始化
-    renderHistory();
+    localStorage.setItem("allChats", JSON.stringify(chats));
     renderMessages();
-  </script>
+    renderHistory();
+  }
+
+  async function sendMessageToBackend(message) {
+    try {
+      const response = await fetch("http://localhost:5000/chat", { // 改成你的后端地址
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: message })
+      });
+
+      if (!response.ok) {
+        throw new Error("后端请求失败");
+      }
+
+      const data = await response.json();
+      // 假设后端返回 { reply: "AI回答..." }
+      addMessage("ai", data.reply);
+    } catch (error) {
+      console.error(error);
+      addMessage("ai", "❌ 请求后端失败，请检查服务器。");
+    }
+  }
+
+  sendButton.addEventListener("click", () => {
+    const text = userInput.value.trim();
+    if (text) {
+      addMessage("user", text);
+      userInput.value = "";
+      sendMessageToBackend(text); // 调用后端
+    }
+  });
+
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendButton.click();
+    }
+  });
+
+  function newChat() {
+    chats.push({ title: null, messages: [] });
+    currentChatIndex = chats.length - 1;
+    localStorage.setItem("allChats", JSON.stringify(chats));
+    localStorage.setItem("currentChatIndex", currentChatIndex);
+    renderMessages();
+    renderHistory();
+  }
+
+  // 初始化
+  renderHistory();
+  renderMessages();
+</script>
+
 </body>
 </html>
 

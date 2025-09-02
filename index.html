@@ -281,7 +281,7 @@
 
   async function sendMessageToBackend(message) {
     try {
-      const response = await fetch("http://localhost:5000/chat", { // 改成你的后端地址
+      const response = await fetch("http://localhost:8000/chat", { // ⚠ 改成你的 FastAPI 端口
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -294,8 +294,8 @@
       }
 
       const data = await response.json();
-      // 假设后端返回 { reply: "AI回答..." }
-      addMessage("ai", data.reply);
+      // FastAPI 返回 {"response": "..."}
+      addMessage("ai", data.response);
     } catch (error) {
       console.error(error);
       addMessage("ai", "❌ 请求后端失败，请检查服务器。");
@@ -307,7 +307,7 @@
     if (text) {
       addMessage("user", text);
       userInput.value = "";
-      sendMessageToBackend(text); // 调用后端
+      sendMessageToBackend(text);
     }
   });
 

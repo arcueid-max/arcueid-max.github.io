@@ -1,118 +1,152 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>答而有据 - 智能问答学习平台</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Segoe UI", Arial, sans-serif; background: #0f172a; color: #f8fafc; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      -webkit-font-smoothing: antialiased;
+    }
 
     /* 顶部导航栏 */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 60px;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15,23,42,0.85);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 40px;
+      padding: 0 36px;
       z-index: 1000;
     }
-    nav h1 {
-      font-size: 20px;
-      color: #38bdf8;
-    }
-    nav a {
+    nav h1 { font-size: 20px; color: #38bdf8; }
+    nav .links a {
       color: #cbd5e1;
       text-decoration: none;
-      margin-left: 20px;
+      margin-left: 18px;
       font-size: 14px;
-      transition: color 0.3s;
+      transition: color .18s;
     }
-    nav a:hover { color: #fff; }
+    nav .links a:hover { color: #fff; }
 
-    /* 首屏介绍区 */
+    /* 首屏：背景图 & 覆盖层 */
     .hero {
       height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      position: relative;
       background: url("ai-bg.jpg") center/cover no-repeat;
-      text-align: center;
-      padding: 0 20px;
     }
-    .hero h2 {
-      font-size: 42px;
-      margin-bottom: 20px;
-      color: #38bdf8;
+    /* 半透明遮罩（让文字在任何背景上清晰）*/
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 1;
     }
-    .hero p {
-      font-size: 18px;
-      color: #f1f5f9;
-      max-width: 600px;
-      line-height: 1.8;
-      margin-bottom: 40px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 14px 28px;
-      font-size: 18px;
-      border-radius: 10px;
-      background: #10a37f;
-      color: white;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .btn:hover { background: #0e8c6b; }
 
-    /* 研究方向展示 */
+    /* 文字块：放在屏幕左上四分之一（中心对齐到 25% / 25%）*/
+    .hero .intro-block {
+      position: absolute;
+      left: 25%;
+      top: 25%;
+      transform: translate(-50%,-50%); /* 以该点为中心对齐 */
+      z-index: 2;
+      max-width: 560px;
+      padding: 24px 28px;
+      background: rgba(3,7,18,0.32); /* 半透明背景，增强可读性 */
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+
+    /* 小屏自适应：把文字块靠上靠左但不出屏 */
+    @media (max-width: 900px) {
+      .hero .intro-block {
+        left: 12%;
+        top: 14%;
+        transform: none;
+        max-width: calc(100% - 40px);
+        padding: 18px;
+      }
+      nav { padding: 0 18px; }
+    }
+
+    .intro-block h2 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #38bdf8;
+      line-height: 1.05;
+    }
+    .intro-block p {
+      color: #e6eef8;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .intro-block .btn {
+      display: inline-block;
+      padding: 12px 22px;
+      background: #10a37f;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: background .18s, transform .12s;
+    }
+    .intro-block .btn:hover { background: #0e8c6b; transform: translateY(-2px); }
+
+    /* 研究方向区（放在下方，需滚动才能看到） */
     .research {
-      padding: 100px 40px;
       background: #0f172a;
+      padding: 100px 40px;
       text-align: center;
     }
     .research h2 {
       font-size: 28px;
-      margin-bottom: 30px;
       color: #38bdf8;
+      margin-bottom: 30px;
     }
     .scroll-container {
       display: flex;
       gap: 20px;
       overflow-x: auto;
-      padding: 20px 0;
+      padding: 10px 12px;
       scroll-behavior: smooth;
     }
-    .scroll-container::-webkit-scrollbar {
-      height: 8px;
-    }
+    .scroll-container::-webkit-scrollbar { height: 8px; }
     .scroll-container::-webkit-scrollbar-thumb {
-      background: #475569;
-      border-radius: 4px;
+      background: #475569; border-radius: 8px;
     }
     .card {
-      min-width: 250px;
-      background: #1e293b;
-      padding: 20px;
+      min-width: 280px;
+      background: #111827;
       border-radius: 12px;
-      flex-shrink: 0;
-      color: #f8fafc;
+      padding: 18px;
+      color: #e6eef8;
       text-align: left;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+      flex-shrink: 0;
+      transition: transform .25s;
     }
-    .card:hover {
-      transform: translateY(-5px);
-    }
+    .card:hover { transform: translateY(-6px); }
+    .card h3 { color: #38bdf8; margin-bottom: 8px; }
+    .card p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+
+    /* 页面底部留白，避免内容被遮挡 */
+    footer { padding: 28px; text-align: center; color: #9aa7bd; background: rgba(0,0,0,0.02); }
   </style>
 </head>
 <body>
-  <!-- 顶部导航栏 -->
+  <!-- 顶部导航 -->
   <nav>
     <h1>答而有据</h1>
-    <div>
+    <div class="links">
       <a href="index.html">首页</a>
       <a href="chat.html">问答平台</a>
       <a href="faq.html">FAQ</a>
@@ -122,35 +156,43 @@
     </div>
   </nav>
 
-  <!-- 首屏介绍 -->
-  <section class="hero">
-    <h2>答而有据</h2>
-    <p>这是一个基于大模型和 RAG 技术的智能问答学习平台，  
-       致力于让知识问答更加精准、有据可依。</p>
-    <a href="chat.html" class="btn">进入问答平台</a>
+  <!-- 首屏 hero -->
+  <section class="hero" aria-label="首页背景">
+    <!-- 文字块位于屏幕左上四分之一 -->
+    <div class="intro-block" role="region" aria-label="简介">
+      <h2>欢迎来到答而有据</h2>
+      <p>一个基于大模型与 RAG 技术的智能问答学习平台，致力于把知识变成可检索、 可验证的答案。点击下方进入体验。</p>
+      <a class="btn" href="chat.html">进入问答平台</a>
+    </div>
   </section>
 
-  <!-- 研究方向 -->
-  <section class="research">
+  <!-- 研究方向（下方，需要滚动才能看到） -->
+  <section class="research" aria-label="研究方向">
     <h2>研究方向</h2>
-    <div class="scroll-container">
+    <div class="scroll-container" aria-hidden="false">
       <div class="card">
         <h3>自然语言处理</h3>
-        <p>探索语言理解与生成的新方法。</p>
+        <p>探索更鲁棒的语义理解与生成模型，提升问答的上下文连贯性与准确性。</p>
       </div>
       <div class="card">
         <h3>知识增强 (RAG)</h3>
-        <p>结合外部知识库提升模型回答准确率。</p>
+        <p>构建可检索知识库并与模型融合，输出有证据支持的回答。</p>
       </div>
       <div class="card">
         <h3>智能教育</h3>
-        <p>个性化学习问答辅助与知识推荐。</p>
+        <p>将问答能力迁移到教学场景，实现个性化学习与即时辅导。</p>
       </div>
       <div class="card">
         <h3>多模态理解</h3>
-        <p>处理文本、图像、语音等多种输入信息。</p>
+        <p>研究图像、文本、语音协同理解的方法，扩展模型的应用范围。</p>
+      </div>
+      <div class="card">
+        <h3>应用集成</h3>
+        <p>把模型能力通过 API 与现有系统对接，构建便捷的使用体验。</p>
       </div>
     </div>
   </section>
+
+  <footer>© 2025 答而有据 - 智能问答学习平台</footer>
 </body>
 </html>

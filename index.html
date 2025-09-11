@@ -7,69 +7,198 @@
     body {
       margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #0f172a; /* 深蓝背景 */
+      background: url('ai-bg.jpg') no-repeat center center/cover; /* 背景图 */
       color: #f8fafc;
-      text-align: center;
     }
 
+    /* 顶部导航栏 */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    nav h1 {
+      font-size: 24px;
+      color: #38bdf8;
+      margin: 0;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin-left: 20px;
+    }
+
+    nav ul li a {
+      color: #f8fafc;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #38bdf8;
+    }
+
+    /* 顶部欢迎区 */
     header {
-      padding: 100px 20px 60px;
+      padding: 150px 20px 80px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
     }
 
-    header h1 {
+    header h2 {
       font-size: 40px;
       margin-bottom: 20px;
-      color: #38bdf8; /* 浅蓝色 */
+      color: #38bdf8;
     }
 
     header p {
       font-size: 18px;
-      color: #cbd5e1;
       max-width: 700px;
       margin: 0 auto;
+      color: #e2e8f0;
       line-height: 1.8;
     }
 
-    .btn-container {
-      margin-top: 50px;
+    /* 滚动展示区 */
+    .research-section {
+      padding: 60px 40px;
+      background: rgba(15, 23, 42, 0.8);
     }
 
-    .btn {
-      display: inline-block;
-      padding: 15px 30px;
-      font-size: 18px;
-      border-radius: 10px;
-      background: #10a37f;
+    .research-section h3 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #38bdf8;
+    }
+
+    .cards-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding-bottom: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .card {
+      flex: 0 0 300px;
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 20px;
       color: white;
-      text-decoration: none;
-      transition: background 0.3s;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
     }
 
-    .btn:hover {
-      background: #0e8c6b;
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h4 {
+      margin-top: 0;
+      color: #38bdf8;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #10a37f;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .card a:hover {
+      color: #0e8c6b;
     }
 
     footer {
-      margin-top: 80px;
+      text-align: center;
       padding: 20px;
       font-size: 14px;
-      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.6);
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <header>
+  <!-- 顶部导航栏 -->
+  <nav>
     <h1>答而有据</h1>
+    <ul>
+      <li><a href="home.html">首页</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="progress.html">项目进展</a></li>
+      <li><a href="knowledge.html">知识增强</a></li>
+      <li><a href="contact.html">联系我们</a></li>
+      <li><a href="index.html">问答平台</a></li>
+    </ul>
+  </nav>
+
+  <!-- 欢迎区 -->
+  <header>
+    <h2>欢迎来到答而有据</h2>
     <p>
-      欢迎来到 <b>答而有据</b>！这是一个基于大模型和 RAG 技术的智能问答学习平台。  
+      这是一个基于大模型和 RAG 技术的智能问答学习平台。  
       我们致力于让知识问答更加精准、有据可依。  
-      点击下方按钮即可进入平台，与模型进行互动体验。
+      点击下方研究方向，探索我们的功能与平台。
     </p>
-    <div class="btn-container">
-      <a href="chat.html" class="btn">进入问答平台</a>
-    </div>
   </header>
 
+  <!-- 滚动展示研究方向 -->
+  <section class="research-section">
+    <h3>研究方向</h3>
+    <div class="cards-container">
+      <div class="card">
+        <h4>FAQ</h4>
+        <p>快速解答常见问题，帮助用户了解平台的功能与应用场景。</p>
+        <a href="faq.html">了解更多 →</a>
+      </div>
+      <div class="card">
+        <h4>项目进展</h4>
+        <p>实时更新研发动态与阶段成果，让用户跟随项目成长。</p>
+        <a href="progress.html">查看详情 →</a>
+      </div>
+      <div class="card">
+        <h4>知识增强</h4>
+        <p>基于 RAG 技术的知识注入，保证问答结果准确且有据可依。</p>
+        <a href="knowledge.html">进入 →</a>
+      </div>
+      <div class="card">
+        <h4>联系我们</h4>
+        <p>与我们团队取得联系，欢迎合作与交流。</p>
+        <a href="contact.html">联系我们 →</a>
+      </div>
+      <div class="card">
+        <h4>问答平台</h4>
+        <p>直接体验智能问答平台，与模型进行互动对话。</p>
+        <a href="index.html">进入问答平台 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
   <footer>
     © 2025 答而有据 - 智能问答学习平台
   </footer>

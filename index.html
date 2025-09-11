@@ -4,141 +4,107 @@
   <meta charset="UTF-8">
   <title>答而有据 - 智能问答学习平台</title>
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: url('ai-bg.jpg') no-repeat center center/cover; /* 背景图 */
-      color: #f8fafc;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: #0f172a; color: #f8fafc; }
 
     /* 顶部导航栏 */
     nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(15, 23, 42, 0.9);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 50px;
-      background: rgba(0, 0, 0, 0.6);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      padding: 0 40px;
       z-index: 1000;
     }
-
     nav h1 {
-      font-size: 24px;
+      font-size: 20px;
       color: #38bdf8;
-      margin: 0;
     }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav ul li {
-      margin-left: 20px;
-    }
-
-    nav ul li a {
-      color: #f8fafc;
+    nav a {
+      color: #cbd5e1;
       text-decoration: none;
-      font-size: 16px;
+      margin-left: 20px;
+      font-size: 14px;
       transition: color 0.3s;
     }
+    nav a:hover { color: #fff; }
 
-    nav ul li a:hover {
-      color: #38bdf8;
-    }
-
-    /* 顶部欢迎区 */
-    header {
-      padding: 150px 20px 80px;
+    /* 首屏介绍区 */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: url("ai-bg.jpg") center/cover no-repeat;
       text-align: center;
-      background: rgba(0, 0, 0, 0.5);
+      padding: 0 20px;
     }
-
-    header h2 {
-      font-size: 40px;
+    .hero h2 {
+      font-size: 42px;
       margin-bottom: 20px;
       color: #38bdf8;
     }
-
-    header p {
+    .hero p {
       font-size: 18px;
-      max-width: 700px;
-      margin: 0 auto;
-      color: #e2e8f0;
+      color: #f1f5f9;
+      max-width: 600px;
       line-height: 1.8;
+      margin-bottom: 40px;
     }
-
-    /* 滚动展示区 */
-    .research-section {
-      padding: 60px 40px;
-      background: rgba(15, 23, 42, 0.8);
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 10px;
+      background: #10a37f;
+      color: white;
+      text-decoration: none;
+      transition: background 0.3s;
     }
+    .btn:hover { background: #0e8c6b; }
 
-    .research-section h3 {
+    /* 研究方向展示 */
+    .research {
+      padding: 100px 40px;
+      background: #0f172a;
       text-align: center;
+    }
+    .research h2 {
       font-size: 28px;
       margin-bottom: 30px;
       color: #38bdf8;
     }
-
-    .cards-container {
+    .scroll-container {
       display: flex;
-      overflow-x: auto;
       gap: 20px;
-      padding-bottom: 10px;
+      overflow-x: auto;
+      padding: 20px 0;
       scroll-behavior: smooth;
     }
-
+    .scroll-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
     .card {
-      flex: 0 0 300px;
+      min-width: 250px;
       background: #1e293b;
-      border-radius: 12px;
       padding: 20px;
-      color: white;
+      border-radius: 12px;
+      flex-shrink: 0;
+      color: #f8fafc;
       text-align: left;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       transition: transform 0.3s;
     }
-
     .card:hover {
       transform: translateY(-5px);
-    }
-
-    .card h4 {
-      margin-top: 0;
-      color: #38bdf8;
-    }
-
-    .card p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #cbd5e1;
-    }
-
-    .card a {
-      display: inline-block;
-      margin-top: 10px;
-      color: #10a37f;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .card a:hover {
-      color: #0e8c6b;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      background: rgba(0, 0, 0, 0.6);
-      margin-top: 40px;
     }
   </style>
 </head>
@@ -146,61 +112,45 @@
   <!-- 顶部导航栏 -->
   <nav>
     <h1>答而有据</h1>
-    <ul>
-      <li><a href="home.html">首页</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-      <li><a href="progress.html">项目进展</a></li>
-      <li><a href="knowledge.html">知识增强</a></li>
-      <li><a href="contact.html">联系我们</a></li>
-      <li><a href="index.html">问答平台</a></li>
-    </ul>
+    <div>
+      <a href="index.html">首页</a>
+      <a href="chat.html">问答平台</a>
+      <a href="faq.html">FAQ</a>
+      <a href="progress.html">项目进展</a>
+      <a href="rag.html">知识增强</a>
+      <a href="contact.html">联系我们</a>
+    </div>
   </nav>
 
-  <!-- 欢迎区 -->
-  <header>
-    <h2>欢迎来到答而有据</h2>
-    <p>
-      这是一个基于大模型和 RAG 技术的智能问答学习平台。  
-      我们致力于让知识问答更加精准、有据可依。  
-      点击下方研究方向，探索我们的功能与平台。
-    </p>
-  </header>
+  <!-- 首屏介绍 -->
+  <section class="hero">
+    <h2>答而有据</h2>
+    <p>这是一个基于大模型和 RAG 技术的智能问答学习平台，  
+       致力于让知识问答更加精准、有据可依。</p>
+    <a href="chat.html" class="btn">进入问答平台</a>
+  </section>
 
-  <!-- 滚动展示研究方向 -->
-  <section class="research-section">
-    <h3>研究方向</h3>
-    <div class="cards-container">
+  <!-- 研究方向 -->
+  <section class="research">
+    <h2>研究方向</h2>
+    <div class="scroll-container">
       <div class="card">
-        <h4>FAQ</h4>
-        <p>快速解答常见问题，帮助用户了解平台的功能与应用场景。</p>
-        <a href="faq.html">了解更多 →</a>
+        <h3>自然语言处理</h3>
+        <p>探索语言理解与生成的新方法。</p>
       </div>
       <div class="card">
-        <h4>项目进展</h4>
-        <p>实时更新研发动态与阶段成果，让用户跟随项目成长。</p>
-        <a href="progress.html">查看详情 →</a>
+        <h3>知识增强 (RAG)</h3>
+        <p>结合外部知识库提升模型回答准确率。</p>
       </div>
       <div class="card">
-        <h4>知识增强</h4>
-        <p>基于 RAG 技术的知识注入，保证问答结果准确且有据可依。</p>
-        <a href="knowledge.html">进入 →</a>
+        <h3>智能教育</h3>
+        <p>个性化学习问答辅助与知识推荐。</p>
       </div>
       <div class="card">
-        <h4>联系我们</h4>
-        <p>与我们团队取得联系，欢迎合作与交流。</p>
-        <a href="contact.html">联系我们 →</a>
-      </div>
-      <div class="card">
-        <h4>问答平台</h4>
-        <p>直接体验智能问答平台，与模型进行互动对话。</p>
-        <a href="index.html">进入问答平台 →</a>
+        <h3>多模态理解</h3>
+        <p>处理文本、图像、语音等多种输入信息。</p>
       </div>
     </div>
   </section>
-
-  <!-- 页脚 -->
-  <footer>
-    © 2025 答而有据 - 智能问答学习平台
-  </footer>
 </body>
 </html>

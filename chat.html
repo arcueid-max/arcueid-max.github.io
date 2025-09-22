@@ -289,37 +289,26 @@
   }
 
   async function sendMessageToBackend(message) {
-    try {
-      // 发送前清理 <think> 内容
-      const cleanedMessage = cleanThinkTags(message);
+  try {
+    const response = await fetch("http://127.0.0.1:8000/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: message })
+    });
 
-      const response = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt: cleanedMessage })
-      });
+    if (!response.ok) throw new Error("后端请求失败");
 
-      if (!response.ok) {
-        const text = await response.text();
-        console.error("❌ 后端返回错误：", response.status, text);
-        throw new Error(`后端请求失败，状态码 ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("✅ 后端返回：", data);
-
-      if (data && data.response) {
-        addMessage("ai", data.response);
-      } else {
-        addMessage("ai", "⚠️ 后端没有返回 response 字段");
-      }
-    } catch (error) {
-      console.error("❌ 请求异常：", error);
-      addMessage("ai", "❌ 请求后端失败，请检查服务器。");
+    const data = await response.json();
+    if (data && data.response) {
+      addMessage("ai", data.response);
+    } else {
+      addMessage("ai", "⚠️ 后端没有返回 response 字段");
     }
+  } catch (error) {
+    console.error("❌ 请求异常：", error);
+    addMessage("ai", "❌ 请求后端失败，请检查服务器。");
   }
+}
 
   sendButton.addEventListener("click", () => {
     const text = userInput.value.trim();

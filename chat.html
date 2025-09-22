@@ -276,10 +276,7 @@
     if (currentChatIndex === null) newChat();
     const chat = chats[currentChatIndex];
 
-    // 屏蔽 <think> 标签内容
-    const cleanedContent = cleanThinkTags(content);
-
-    chat.messages.push({ role, content: cleanedContent });
+    chat.messages.push({ role, content: content });
     if (!chat.title && role === "user") {
       chat.title = cleanedContent.slice(0, 12);
     }

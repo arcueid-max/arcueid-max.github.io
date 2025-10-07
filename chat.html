@@ -287,7 +287,7 @@
 
   async function sendMessageToBackend(message) {
   try {
-    const response = await fetch("http://127.0.0.1:8000/chat", {
+    const response = await fetch("http://127.0.0.1:8000/chat_stream", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: message })
@@ -295,11 +295,24 @@
 
     if (!response.ok) throw new Error("后端请求失败");
 
-    const data = await response.json();
-    if (data && data.response) {
-      addMessage("ai", data.response);
-    } else {
-      addMessage("ai", "⚠️ 后端没有返回 response 字段");
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let aiMessage = ""; 
+    addMessage("ai", ""); 
+    const chat = chats[currentChatIndex];
+    const msgIndex = chat.messages.length - 1;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      aiMessage += chunk;
+
+      chat.messages[msgIndex].content = aiMessage;
+      localStorage.setItem("allChats", JSON.stringify(chats));
+
+      renderMessages();
     }
   } catch (error) {
     console.error("❌ 请求异常：", error);

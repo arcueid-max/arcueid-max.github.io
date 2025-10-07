@@ -309,10 +309,26 @@
       const chunk = decoder.decode(value, { stream: true });
       aiMessage += chunk;
 
+      
       chat.messages[msgIndex].content = aiMessage;
+
       localStorage.setItem("allChats", JSON.stringify(chats));
 
-      renderMessages();
+      // 渲染时把换行替换成 <br>
+      chatContainer.innerHTML = "";
+      chats[currentChatIndex].messages.forEach(msg => {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("chat-message", msg.role);
+
+        const bubble = document.createElement("div");
+        bubble.classList.add("chat-bubble");
+        
+        bubble.innerHTML = msg.content.replace(/\n/g, "<br>");
+
+        messageDiv.appendChild(bubble);
+        chatContainer.appendChild(messageDiv);
+      });
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   } catch (error) {
     console.error("❌ 请求异常：", error);

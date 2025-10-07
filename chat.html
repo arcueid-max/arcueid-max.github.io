@@ -10,6 +10,10 @@
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
     }
+    
+    .chat-bubble {
+      white-space: pre-wrap;
+    }
 
     /* 整体布局 */
     .container {
@@ -247,7 +251,9 @@
 
       const bubble = document.createElement("div");
       bubble.classList.add("chat-bubble");
-      bubble.textContent = msg.content;
+
+    
+      bubble.innerHTML = msg.content.replace(/\n/g, "<br>");
 
       messageDiv.appendChild(bubble);
       chatContainer.appendChild(messageDiv);
@@ -309,12 +315,9 @@
       const chunk = decoder.decode(value, { stream: true });
       aiMessage += chunk;
 
-      
       chat.messages[msgIndex].content = aiMessage;
-
       localStorage.setItem("allChats", JSON.stringify(chats));
 
-      // 渲染时把换行替换成 <br>
       chatContainer.innerHTML = "";
       chats[currentChatIndex].messages.forEach(msg => {
         const messageDiv = document.createElement("div");
@@ -322,7 +325,6 @@
 
         const bubble = document.createElement("div");
         bubble.classList.add("chat-bubble");
-        
         bubble.innerHTML = msg.content.replace(/\n/g, "<br>");
 
         messageDiv.appendChild(bubble);

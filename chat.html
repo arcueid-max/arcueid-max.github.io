@@ -367,6 +367,10 @@
   renderHistory();
   renderMessages();
 </script>
+window.addEventListener("beforeunload", () => {
+  localStorage.removeItem("allChats");
+  localStorage.removeItem("currentChatIndex");
+});
 
 
 </body>

@@ -36,15 +36,21 @@
     }
     nav .links a:hover { color: #fff; }
 
-    /* 首屏：背景图 & 覆盖层（已加入深色遮罩，确保文字可读） */
-    .hero {
-      height: 100vh;
-      width: 100%;
-      position: relative;
-      background:
-        linear-gradient(rgba(3,7,18,0.65), rgba(3,7,18,0.65)),
-        url("微信图片_20250913004543_14_6.jpg") center/cover no-repeat;
-    }
+/* 1. 整个页面其余区域先刷成白色 */
+body {
+  margin: 0;
+  background: #fff;   /* ← 除 .hero 以外的区域全是白底 */
+}
+
+/* 2. 首屏依旧保持原来的深色遮罩 + 背景图 */
+.hero {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background:
+    linear-gradient(rgba(3,7,18,0.65), rgba(3,7,18,0.65)),
+    url("微信图片_20250913004543_14_6.jpg") center/cover no-repeat;
+}
 
     /* 文字介绍区 */
     .intro-block {

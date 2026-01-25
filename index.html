@@ -145,6 +145,124 @@ body {
 
     footer { padding: 28px; text-align: center; color: #9aa7bd; background: rgba(0,0,0,0.02); }
   </style>
+  /* ===== Research Areas (Image-style layout) ===== */
+.research-v2 {
+  background: #ffffff;
+  padding: 120px 60px;
+  color: #0f172a;
+}
+
+.research-header {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.research-header .tag {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 999px;
+  background: #e0edff;
+  color: #2563eb;
+  margin-bottom: 18px;
+}
+
+.research-header h2 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.research-header p {
+  font-size: 18px;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.research-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+/* Card */
+.research-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.research-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Image placeholder */
+.card-image {
+  height: 220px;
+  background: #cbd5e1; /* 后续可换成真实图片 */
+}
+
+/* Content */
+.card-content {
+  padding: 28px;
+}
+
+.card-content h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.card-content .desc {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+/* Projects */
+.projects h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.projects ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.projects li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 15px;
+  color: #2563eb;
+  margin-bottom: 6px;
+}
+
+.projects li::before {
+  content: "●";
+  position: absolute;
+  left: 0;
+  color: #2563eb;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .research-header h2 {
+    font-size: 32px;
+  }
+}
+
 </head>
 <body>
   <nav>
@@ -167,31 +285,89 @@ body {
     </div>
   </section>
 
-  <section class="research" aria-label="研究方向">
-    <h2>研究方向</h2>
-    <div class="scroll-container" aria-hidden="false">
-      <div class="card">
-        <h3>自然语言处理</h3>
-        <p>探索更鲁棒的语义理解与生成模型，提升问答的上下文连贯性与准确性。</p>
-      </div>
-      <div class="card">
-        <h3>知识增强 (RAG)</h3>
-        <p>构建可检索知识库并与模型融合，输出有证据支持的回答。</p>
-      </div>
-      <div class="card">
-        <h3>智能教育</h3>
-        <p>将问答能力迁移到教学场景，实现个性化学习与即时辅导。</p>
-      </div>
-      <div class="card">
-        <h3>多模态理解</h3>
-        <p>研究图像、文本、语音协同理解的方法，扩展模型的应用范围。</p>
-      </div>
-      <div class="card">
-        <h3>应用集成</h3>
-        <p>把模型能力通过 API 与现有系统对接，构建便捷的使用体验。</p>
+<section class="research-v2" aria-label="研究方向">
+  <div class="research-header">
+    <span class="tag">Research Areas</span>
+    <h2>Advancing Intelligent Learning Through Research</h2>
+    <p>
+      Our interdisciplinary research focuses on building trustworthy,
+      evidence-based intelligent question answering systems.
+    </p>
+  </div>
+
+  <div class="research-grid">
+    <!-- Card 1 -->
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content">
+        <h3>Research Area Title</h3>
+        <p class="desc">
+          Brief description of this research area. Content to be added later.
+        </p>
+
+        <div class="projects">
+          <h4>Featured Projects</h4>
+          <ul>
+            <li>Project Placeholder One</li>
+            <li>Project Placeholder Two</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Card 2 -->
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content">
+        <h3>Research Area Title</h3>
+        <p class="desc">Brief description placeholder.</p>
+
+        <div class="projects">
+          <h4>Featured Projects</h4>
+          <ul>
+            <li>Project Placeholder</li>
+            <li>Project Placeholder</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content">
+        <h3>Research Area Title</h3>
+        <p class="desc">Brief description placeholder.</p>
+
+        <div class="projects">
+          <h4>Featured Projects</h4>
+          <ul>
+            <li>Project Placeholder</li>
+            <li>Project Placeholder</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content">
+        <h3>Research Area Title</h3>
+        <p class="desc">Brief description placeholder.</p>
+
+        <div class="projects">
+          <h4>Featured Projects</h4>
+          <ul>
+            <li>Project Placeholder</li>
+            <li>Project Placeholder</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <footer>© 2025 答而有据 - 智能问答学习平台</footer>
 </body>

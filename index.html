@@ -11,11 +11,11 @@
 
     body {
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #fff;
+      background: #ffffff;
       color: #0f172a;
     }
 
-    /* ===== 顶部导航栏（完全不动） ===== */
+    /* ===== 顶部导航栏（不动） ===== */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -35,9 +35,10 @@
       font-size: 16px;
     }
 
-    /* ===== 首屏 Hero（重点修改区） ===== */
+    /* ===== Hero 首屏（已修复高度问题） ===== */
     .hero {
-      height: 100vh;
+      height: calc(100vh - 70px);   /* 关键修复点 */
+      margin-top: 70px;             /* 为 fixed nav 让位 */
       width: 100%;
       background:
         linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.9)),
@@ -46,7 +47,6 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding-top: 70px;
     }
 
     .intro-block {
@@ -110,8 +110,7 @@
       box-shadow: 0 10px 30px rgba(99,102,241,.4);
     }
 
-    /* ===== 以下内容完全保持原样 ===== */
-
+    /* ===== Research 区（完全保留） ===== */
     .research-v2 {
       background: #ffffff;
       padding: 120px 60px;
@@ -205,7 +204,7 @@
 
     <div class="orgs">
       <div class="org">北京交通大学</div>
-      <div class="org">智能问答与 RAG 研究</div>
+      <div class="org">RAG & 智能问答研究</div>
     </div>
 
     <p>
@@ -221,7 +220,7 @@
 </section>
 
 <section class="research-v2">
-  <!-- 原 research 内容，完全没动 -->
+  <!-- 原 Research 内容 그대로 -->
 </section>
 
 <footer>© 2025 答而有据 - 智能问答学习平台</footer>

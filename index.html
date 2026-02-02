@@ -15,7 +15,7 @@
       color: #0f172a;
     }
 
-    /* ===== 顶部导航栏（不动） ===== */
+    /* ===== 顶部导航栏（结构不变，只加 logo 样式） ===== */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -27,7 +27,21 @@
       padding: 0 36px;
       z-index: 1000;
     }
-    nav h1 { font-size: 22px; color: #1f2937; margin-left: 40px; }
+
+    nav h1 {
+      font-size: 22px;
+      color: #1f2937;
+      margin-left: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav h1 img {
+      height: 26px;
+      width: auto;
+    }
+
     nav .links a {
       color: #1f2937;
       text-decoration: none;
@@ -35,7 +49,7 @@
       font-size: 16px;
     }
 
-    /* ===== Hero 首屏 ===== */
+    /* ===== Hero 首屏（完全不放 logo） ===== */
     .hero {
       height: calc(100vh - 70px);
       margin-top: 70px;
@@ -55,26 +69,12 @@
       color: #f8fafc;
     }
 
-    /* ===== 标题 + Logo（仅新增，不影响布局） ===== */
-    .title-wrap {
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 22px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .title-wrap img {
-      height: 48px;
-      width: auto;
-    }
-
     .intro-block h2 {
       font-size: 54px;
       font-weight: 700;
       letter-spacing: 1.5px;
       color: #a78bfa;
+      margin-bottom: 22px;
     }
 
     .intro-block .subtitle {
@@ -131,58 +131,6 @@
       color: #0f172a;
     }
 
-    .research-header {
-      max-width: 900px;
-      margin: 0 auto 80px;
-      text-align: center;
-    }
-
-    .research-header .tag {
-      display: inline-block;
-      padding: 6px 14px;
-      font-size: 14px;
-      border-radius: 999px;
-      background: #e0edff;
-      color: #2563eb;
-      margin-bottom: 18px;
-    }
-
-    .research-header h2 {
-      font-size: 42px;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-
-    .research-header p {
-      font-size: 18px;
-      color: #475569;
-      line-height: 1.7;
-    }
-
-    .research-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-    }
-
-    .research-card {
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-    }
-
-    .card-image {
-      height: 220px;
-      background: #cbd5e1;
-    }
-
-    .card-content {
-      padding: 28px;
-    }
-
     footer {
       padding: 28px;
       text-align: center;
@@ -192,8 +140,8 @@
 
     @media (max-width: 900px) {
       .intro-block h2 { font-size: 34px; }
-      .title-wrap img { height: 36px; }
       .intro-block .subtitle { font-size: 20px; }
+      nav h1 img { height: 22px; }
     }
   </style>
 </head>
@@ -201,7 +149,12 @@
 <body>
 
 <nav>
-  <h1>灵眸 <i class="fa-solid fa-magnifying-glass"></i></h1>
+  <h1>
+    <img src="cybereye-logo.png" alt="CyberEye Logo">
+    灵眸
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </h1>
+
   <div class="links">
     <a href="index.html">首页</a>
     <a href="chat.html">问答平台</a>
@@ -215,10 +168,7 @@
 <section class="hero">
   <div class="intro-block">
 
-    <div class="title-wrap">
-      <img src="cybereye-logo.png" alt="CyberEye Logo">
-      <h2>灵眸（CyberEye）</h2>
-    </div>
+    <h2>灵眸（CyberEye）</h2>
 
     <div class="subtitle">跨空间认知大模型</div>
 
@@ -240,7 +190,6 @@
 
   </div>
 </section>
-
 <section class="research-v2">
   <div class="research-header">
     <span class="tag">Research Areas</span>
@@ -252,10 +201,22 @@
   </div>
 
   <div class="research-grid">
-    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
-    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
-    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
-    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content"></div>
+    </div>
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content"></div>
+    </div>
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content"></div>
+    </div>
+    <div class="research-card">
+      <div class="card-image"></div>
+      <div class="card-content"></div>
+    </div>
   </div>
 </section>
 

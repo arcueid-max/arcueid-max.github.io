@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <title>答而有据 - 智能问答学习平台</title>
+  <title>灵眸（CyberEye）—跨空间认知大模型</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -35,10 +35,10 @@
       font-size: 16px;
     }
 
-    /* ===== Hero 首屏（已修复高度问题） ===== */
+    /* ===== Hero 首屏 ===== */
     .hero {
-      height: calc(100vh - 70px);   /* 关键修复点 */
-      margin-top: 70px;             /* 为 fixed nav 让位 */
+      height: calc(100vh - 70px);
+      margin-top: 70px;
       width: 100%;
       background:
         linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.9)),
@@ -55,11 +55,25 @@
       color: #f8fafc;
     }
 
+    /* ===== 标题 + Logo ===== */
+    .title-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .title-wrap img {
+      height: 48px;
+      width: auto;
+    }
+
     .intro-block h2 {
       font-size: 54px;
       font-weight: 700;
-      margin-bottom: 22px;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       color: #a78bfa;
     }
 
@@ -177,7 +191,8 @@
     }
 
     @media (max-width: 900px) {
-      .intro-block h2 { font-size: 36px; }
+      .intro-block h2 { font-size: 34px; }
+      .title-wrap img { height: 36px; }
       .intro-block .subtitle { font-size: 20px; }
     }
   </style>
@@ -199,27 +214,34 @@
 
 <section class="hero">
   <div class="intro-block">
-    <h2>答而有据大模型</h2>
-    <div class="subtitle">新一代知识增强智能问答平台</div>
+
+    <div class="title-wrap">
+      <img src="cybereye-logo.png" alt="CyberEye Logo">
+      <h2>灵眸（CyberEye）</h2>
+    </div>
+
+    <div class="subtitle">跨空间认知大模型</div>
 
     <div class="orgs">
-      <div class="org">北京交通大学</div>
-      <div class="org">RAG & 智能问答研究</div>
+      <div class="org">具身感知 · 数字空间</div>
+      <div class="org">主动探索 · 高阶推理</div>
     </div>
 
     <p>
-      支持多轮问答、证据溯源、知识增强与可验证推理，
-      打造可信、可解释的智能学习体验。
+      一款面向复杂场景主动认知的大模型系统，融合物理空间具身感知与数字空间多源信息，
+      根据用户需求进行主动探索与分析，支持高阶推理与个体增强，
+      赋能智能巡检、态势感知、智能运维等多类应用场景。
     </p>
 
     <a class="btn" href="chat.html">
       <i class="fa-regular fa-comment-dots"></i>
-      立即对话
+      立即体验
     </a>
+
   </div>
 </section>
 
-<section class="research-v2" aria-label="研究方向">
+<section class="research-v2">
   <div class="research-header">
     <span class="tag">Research Areas</span>
     <h2>Advancing Intelligent Learning Through Research</h2>
@@ -230,70 +252,14 @@
   </div>
 
   <div class="research-grid">
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>Research Area Title</h3>
-        <p class="desc">Brief description of this research area.</p>
-        <div class="projects">
-          <h4>Featured Projects</h4>
-          <ul>
-            <li>Project Placeholder One</li>
-            <li>Project Placeholder Two</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>Research Area Title</h3>
-        <p class="desc">Brief description placeholder.</p>
-        <div class="projects">
-          <h4>Featured Projects</h4>
-          <ul>
-            <li>Project Placeholder</li>
-            <li>Project Placeholder</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>Research Area Title</h3>
-        <p class="desc">Brief description placeholder.</p>
-        <div class="projects">
-          <h4>Featured Projects</h4>
-          <ul>
-            <li>Project Placeholder</li>
-            <li>Project Placeholder</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>Research Area Title</h3>
-        <p class="desc">Brief description placeholder.</p>
-        <div class="projects">
-          <h4>Featured Projects</h4>
-          <ul>
-            <li>Project Placeholder</li>
-            <li>Project Placeholder</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
+    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
+    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
+    <div class="research-card"><div class="card-image"></div><div class="card-content"></div></div>
   </div>
 </section>
 
-
-<footer>© 2025 答而有据 - 智能问答学习平台</footer>
+<footer>© 灵眸（CyberEye）—跨空间认知大模型</footer>
 
 </body>
 </html>

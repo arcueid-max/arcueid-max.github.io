@@ -15,7 +15,7 @@
       color: #0f172a;
     }
 
-    /* ===== 顶部导航栏（结构不变，只加 logo 样式） ===== */
+    /* ===== 顶部导航栏（不动） ===== */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -49,7 +49,7 @@
       font-size: 16px;
     }
 
-    /* ===== Hero 首屏（完全不放 logo） ===== */
+    /* ===== Hero 首屏 ===== */
     .hero {
       height: calc(100vh - 70px);
       margin-top: 70px;
@@ -72,9 +72,9 @@
     .intro-block h2 {
       font-size: 54px;
       font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #a78bfa;
       margin-bottom: 22px;
+      letter-spacing: 2px;
+      color: #a78bfa;
     }
 
     .intro-block .subtitle {
@@ -124,11 +124,63 @@
       box-shadow: 0 10px 30px rgba(99,102,241,.4);
     }
 
-    /* ===== Research 区（完全保留） ===== */
+    /* ===== Research 区（与你原始版本一致） ===== */
     .research-v2 {
       background: #ffffff;
       padding: 120px 60px;
       color: #0f172a;
+    }
+
+    .research-header {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      text-align: center;
+    }
+
+    .research-header .tag {
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 999px;
+      background: #e0edff;
+      color: #2563eb;
+      margin-bottom: 18px;
+    }
+
+    .research-header h2 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .research-header p {
+      font-size: 18px;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .research-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+
+    .research-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .card-image {
+      height: 220px;
+      background: #cbd5e1;
+    }
+
+    .card-content {
+      padding: 28px;
     }
 
     footer {
@@ -139,9 +191,8 @@
     }
 
     @media (max-width: 900px) {
-      .intro-block h2 { font-size: 34px; }
+      .intro-block h2 { font-size: 36px; }
       .intro-block .subtitle { font-size: 20px; }
-      nav h1 img { height: 22px; }
     }
   </style>
 </head>
@@ -152,9 +203,7 @@
   <h1>
     <img src="cybereye-logo.png" alt="CyberEye Logo">
     灵眸
-    <i class="fa-solid fa-magnifying-glass"></i>
   </h1>
-
   <div class="links">
     <a href="index.html">首页</a>
     <a href="chat.html">问答平台</a>
@@ -167,9 +216,7 @@
 
 <section class="hero">
   <div class="intro-block">
-
     <h2>灵眸（CyberEye）</h2>
-
     <div class="subtitle">跨空间认知大模型</div>
 
     <div class="orgs">
@@ -179,7 +226,7 @@
 
     <p>
       一款面向复杂场景主动认知的大模型系统，融合物理空间具身感知与数字空间多源信息，
-      根据用户需求进行主动探索与分析，支持高阶推理与个体增强，
+      根据用户需求进行主动探索与融合分析，并支持高阶推理与个体增强，
       赋能智能巡检、态势感知、智能运维等多类应用场景。
     </p>
 
@@ -187,9 +234,9 @@
       <i class="fa-regular fa-comment-dots"></i>
       立即体验
     </a>
-
   </div>
 </section>
+
 <section class="research-v2">
   <div class="research-header">
     <span class="tag">Research Areas</span>
@@ -203,19 +250,50 @@
   <div class="research-grid">
     <div class="research-card">
       <div class="card-image"></div>
-      <div class="card-content"></div>
+      <div class="card-content">
+        <h3>Cross-Space Cognition</h3>
+        <p class="desc">Integrated perception and reasoning across physical and digital spaces.</p>
+        <ul>
+          <li>Embodied sensing</li>
+          <li>Multi-source fusion</li>
+        </ul>
+      </div>
     </div>
+
     <div class="research-card">
       <div class="card-image"></div>
-      <div class="card-content"></div>
+      <div class="card-content">
+        <h3>Active Exploration</h3>
+        <p class="desc">Task-driven information seeking and adaptive reasoning.</p>
+        <ul>
+          <li>Intent understanding</li>
+          <li>Dynamic planning</li>
+        </ul>
+      </div>
     </div>
+
     <div class="research-card">
       <div class="card-image"></div>
-      <div class="card-content"></div>
+      <div class="card-content">
+        <h3>Intelligent Inspection</h3>
+        <p class="desc">AI-powered inspection for infrastructure and operations.</p>
+        <ul>
+          <li>Risk detection</li>
+          <li>Situation awareness</li>
+        </ul>
+      </div>
     </div>
+
     <div class="research-card">
       <div class="card-image"></div>
-      <div class="card-content"></div>
+      <div class="card-content">
+        <h3>Knowledge-Enhanced Reasoning</h3>
+        <p class="desc">Evidence-based inference with structured knowledge support.</p>
+        <ul>
+          <li>RAG framework</li>
+          <li>Explainable outputs</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>

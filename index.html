@@ -204,6 +204,44 @@ nav .links a {
   background:#a78bfa;
   border-radius:999px;
 }
+  /* ======= 第五面升级为大 CTA 展示 ======= */
+.footer{
+  background:
+    radial-gradient(120% 80% at 50% 100%, #2563eb 0%, transparent 60%),
+    linear-gradient(180deg, #020617 0%, #1e1b4b 45%, #7c3aed 100%);
+  text-align:center;
+}
+
+.footer-title{
+  font-size:44px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.footer-sub{
+  font-size:20px;
+  color:#e5e7eb;
+  margin-bottom:46px;
+}
+
+/* CTA 按钮 */
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 36px;
+  font-size:18px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#3b82f6,#a78bfa);
+  color:#fff;
+  cursor:pointer;
+  transition:.3s;
+}
+.cta-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(139,92,246,.45);
+}
+
 </style>
 </head>
 
@@ -293,12 +331,23 @@ nav .links a {
   </div>
 </section>
 
-<!-- 第五面 -->
 <section class="screen footer">
-  <h2>灵眸 CyberEye</h2>
-  <p>跨空间认知 · 智能未来</p>
-  <div class="contact">联系我们</div>
+  <div class="reveal">
+    <div class="footer-title">
+      灵眸 CyberEye 开启跨空间智能新时代
+    </div>
+
+    <div class="footer-sub">
+      跨空间认知 · 多模态融合 · 具身智能协同
+    </div>
+
+    <div class="cta-btn">
+      联系我们
+      <span>›</span>
+    </div>
+  </div>
 </section>
+
 
 <script>
 const io=new IntersectionObserver(es=>{

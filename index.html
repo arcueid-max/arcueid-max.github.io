@@ -13,7 +13,7 @@ body{
   color:#f8fafc;
 }
 
-/* ================= 顶部导航（保持原样） ================= */
+/* ================= 顶部导航（严格保留） ================= */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -33,9 +33,7 @@ nav h1 {
   align-items: center;
   gap: 10px;
 }
-nav h1 img {
-  height: 26px;
-}
+nav h1 img { height: 26px; }
 nav .links a {
   color: #1f2937;
   text-decoration: none;
@@ -139,6 +137,25 @@ nav .links a {
   color:#e5e7eb;
 }
 
+/* ======= 新增：卡片顶部科技感图标（只加，不改其他） ======= */
+.card-icon{
+  width:88px;
+  height:88px;
+  margin:0 auto 22px;
+  border-radius:20px;
+  background:rgba(167,139,250,.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:
+    0 0 0 1px rgba(167,139,250,.35),
+    0 0 30px rgba(139,92,246,.35);
+}
+.card-icon img{
+  width:64px;
+  height:auto;
+}
+
 /* ================= 第四面占位 ================= */
 .placeholder .img-box{
   height:180px;
@@ -151,9 +168,15 @@ nav .links a {
   margin-bottom:18px;
 }
 
-/* ================= 第五面 ================= */
+/* ================= 第五面（仅改背景渐变） ================= */
 .footer{
-  background:linear-gradient(135deg,#4c1d95,#7c3aed,#2563eb);
+  background:
+    linear-gradient(
+      180deg,
+      #020617 0%,
+      #1e1b4b 55%,
+      #7c3aed 100%
+    );
 }
 .footer h2{
   font-size:48px;
@@ -164,7 +187,7 @@ nav .links a {
   margin-bottom:50px;
 }
 
-/* 联系我们下方紫色填充 */
+/* 联系我们下方紫色填充（保持原样） */
 .contact{
   font-size:18px;
   position:relative;
@@ -216,19 +239,22 @@ nav .links a {
   <div class="school reveal">北京交通大学</div>
 </section>
 
-<!-- 第二面：核心能力（小卡片） -->
+<!-- 第二面 -->
 <section class="screen section">
   <h2 class="reveal">核心能力</h2>
   <div class="cards three reveal">
     <div class="card">
+      <div class="card-icon"><img src="icons/understanding.png"></div>
       <h3>类人导航</h3>
       <p>模拟人类跨空间认知方式，实现自主环境探索与路径规划，应对复杂场景。</p>
     </div>
     <div class="card">
+      <div class="card-icon"><img src="icons/qa.png"></div>
       <h3>认知问答</h3>
       <p>基于多源信息与跨空间上下文理解，实现自主认知增强与智能问答。</p>
     </div>
     <div class="card">
+      <div class="card-icon"><img src="icons/task.png"></div>
       <h3>任务智策</h3>
       <p>支持基于意图的任务编排与资源调配，实现多智能体协同与自适应决策。</p>
     </div>
@@ -240,12 +266,14 @@ nav .links a {
   <h2 class="reveal">应用场景</h2>
   <div class="cards two reveal">
     <div class="card">
+      <div class="card-icon"><img src="icons/traffic.png"></div>
       <h3>智慧交运系统</h3>
       <p>融合多源交通感知与线上数字信息，实现基于任务目标的智能交通运输规划，支持协同调度与风险预警。</p>
     </div>
     <div class="card">
+      <div class="card-icon"><img src="icons/safety.png"></div>
       <h3>具身安监系统</h3>
-      <p>协同利用巡检设备、监控系统与线上信息，对复杂场景运行状态进行持续智能研判。</p>
+      <p>协同利用巡检设备、监控系统与线上信息，对工厂等复杂场景运行状态进行持续智能研判，全面提升安全监测、隐患识别与应急响应能力。</p>
     </div>
   </div>
 </section>

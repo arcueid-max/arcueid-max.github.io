@@ -111,50 +111,27 @@ nav .links a {
 }
 .section h2{
   font-size:52px;
-  margin-bottom:24px;
-}
-.section-desc{
-  font-size:18px;
-  max-width:860px;
-  line-height:1.8;
-  color:#c7d2fe;
   margin-bottom:60px;
-}
-
-/* ================= 胶囊标签 ================= */
-.tabs{
-  display:flex;
-  gap:20px;
-  margin-bottom:70px;
-}
-.tab{
-  padding:12px 30px;
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  cursor:pointer;
-  transition:.3s;
-}
-.tab.active{
-  background:linear-gradient(135deg,#6366f1,#8b5cf6);
-  box-shadow:0 0 20px rgba(139,92,246,.6);
 }
 
 /* ================= 卡片 ================= */
 .cards{
   width:100%;
-  max-width:1200px;
+  max-width:1100px;
   display:grid;
-  gap:40px;
+  gap:36px;
 }
+.three{grid-template-columns:repeat(3,1fr)}
 .two{grid-template-columns:repeat(2,1fr)}
+
 .card{
   background:rgba(255,255,255,.06);
   border-radius:22px;
-  padding:48px 36px;
+  padding:46px 34px;
 }
 .card h3{
   font-size:22px;
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 .card p{
   font-size:16px;
@@ -184,11 +161,25 @@ nav .links a {
 }
 .footer p{
   font-size:20px;
-  margin-bottom:40px;
+  margin-bottom:50px;
 }
+
+/* 联系我们下方紫色填充 */
 .contact{
   font-size:18px;
-  opacity:.9;
+  position:relative;
+  display:inline-block;
+}
+.contact::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:-10px;
+  width:42px;
+  height:6px;
+  background:#a78bfa;
+  border-radius:999px;
 }
 </style>
 </head>
@@ -225,26 +216,28 @@ nav .links a {
   <div class="school reveal">北京交通大学</div>
 </section>
 
-<!-- 第二面 -->
+<!-- 第二面：核心能力（小卡片） -->
 <section class="screen section">
   <h2 class="reveal">核心能力</h2>
-  <div class="tabs reveal">
-    <div class="tab active">类人导航</div>
-    <div class="tab">认知问答</div>
-    <div class="tab">任务智策</div>
+  <div class="cards three reveal">
+    <div class="card">
+      <h3>类人导航</h3>
+      <p>模拟人类跨空间认知方式，实现自主环境探索与路径规划，应对复杂场景。</p>
+    </div>
+    <div class="card">
+      <h3>认知问答</h3>
+      <p>基于多源信息与跨空间上下文理解，实现自主认知增强与智能问答。</p>
+    </div>
+    <div class="card">
+      <h3>任务智策</h3>
+      <p>支持基于意图的任务编排与资源调配，实现多智能体协同与自适应决策。</p>
+    </div>
   </div>
 </section>
 
 <!-- 第三面 -->
 <section class="screen section">
   <h2 class="reveal">应用场景</h2>
-  <div class="section-desc reveal">
-    基于跨空间融合分析实现开放环境的系统级认知与推理，赋能交通、工业等复杂现实场景
-  </div>
-  <div class="tabs reveal">
-    <div class="tab active">智慧交运系统</div>
-    <div class="tab">具身安监系统</div>
-  </div>
   <div class="cards two reveal">
     <div class="card">
       <h3>智慧交运系统</h3>
@@ -252,7 +245,7 @@ nav .links a {
     </div>
     <div class="card">
       <h3>具身安监系统</h3>
-      <p>协同利用巡检设备、监控系统与线上信息，对工厂等复杂场景运行状态进行持续智能研判，全面提升安全监测、隐患识别与应急响应能力。</p>
+      <p>协同利用巡检设备、监控系统与线上信息，对复杂场景运行状态进行持续智能研判。</p>
     </div>
   </div>
 </section>

@@ -15,6 +15,7 @@
       color: #0f172a;
     }
 
+    /* ===== 导航 ===== */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -38,7 +39,6 @@
 
     nav h1 img {
       height: 26px;
-      width: auto;
     }
 
     nav .links a {
@@ -48,10 +48,10 @@
       font-size: 16px;
     }
 
+    /* ===== 第一面 ===== */
     .hero {
       height: calc(100vh - 70px);
       margin-top: 70px;
-      width: 100%;
       background:
         linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.9)),
         url("微信图片_20250913004543_14_6.jpg") center/cover no-repeat;
@@ -94,102 +94,99 @@
       border-radius: 999px;
       background: rgba(255,255,255,0.12);
       font-size: 14px;
-      color: #e5e7eb;
     }
 
     .intro-block p {
       font-size: 18px;
       line-height: 1.8;
-      color: #e5e7eb;
       margin-bottom: 36px;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 34px;
-      font-size: 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg,#6366f1,#8b5cf6);
-      color: #fff;
-      text-decoration: none;
-      transition: transform .15s, box-shadow .15s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(99,102,241,.4);
-    }
-
-    .research-v2 {
-      background: #ffffff;
-      padding: 120px 60px;
-      color: #0f172a;
-    }
-
-    .research-header {
-      max-width: 900px;
-      margin: 0 auto 80px;
+    /* ===== 第二、三面通用样式 ===== */
+    .capability-section {
+      background: radial-gradient(circle at top, #1e1b4b, #020617);
+      padding: 140px 60px;
       text-align: center;
+      color: #f8fafc;
     }
 
-    .research-header .tag {
-      display: inline-block;
-      padding: 6px 14px;
-      font-size: 14px;
+    .capability-title {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    .capability-tags {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 80px;
+    }
+
+    .capability-tags .tag {
+      padding: 12px 28px;
       border-radius: 999px;
-      background: #e0edff;
-      color: #2563eb;
-      margin-bottom: 18px;
+      background: rgba(255,255,255,0.12);
+      font-size: 16px;
     }
 
-    .research-header h2 {
-      font-size: 42px;
-      font-weight: 700;
-      margin-bottom: 18px;
+    .capability-tags .active {
+      background: linear-gradient(135deg,#6366f1,#8b5cf6);
+      box-shadow: 0 0 20px rgba(139,92,246,.6);
     }
 
-    .research-header p {
-      font-size: 18px;
-      color: #475569;
-      line-height: 1.7;
-    }
-
-    .research-grid {
+    .capability-cards {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 40px;
     }
 
-    .research-card {
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    .capability-cards.three-cols {
+      grid-template-columns: repeat(3, 1fr);
     }
 
-    .card-image {
-      height: 220px;
-      background: #cbd5e1;
+    .capability-cards.two-cols {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .card-content {
-      padding: 28px;
+    .cap-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 48px 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      backdrop-filter: blur(6px);
+    }
+
+    .cap-icon {
+      font-size: 52px;
+      margin-bottom: 24px;
+    }
+
+    .cap-card h3 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .cap-card p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #c7d2fe;
+    }
+
+    @media (max-width: 900px) {
+      .capability-cards.three-cols,
+      .capability-cards.two-cols {
+        grid-template-columns: 1fr;
+      }
     }
 
     footer {
       padding: 28px;
       text-align: center;
       color: #9aa7bd;
-      background: rgba(0,0,0,0.02);
-    }
-
-    @media (max-width: 900px) {
-      .intro-block h2 { font-size: 36px; }
-      .intro-block .subtitle { font-size: 20px; }
+      background: #020617;
     }
   </style>
 </head>
@@ -216,120 +213,74 @@
   <div class="intro-block">
     <h2>跨空间大模型</h2>
     <div class="subtitle">物理空间 · 信息空间</div>
-
     <div class="orgs">
       <div class="org">具身感知</div>
       <div class="org">跨空间融合</div>
     </div>
-
     <p>
       整合物理空间具身感知与数字空间多源信息，
       支持认知增强与高阶推理，
       带来超越传统系统的跨空间协同洞察与判断能力。
     </p>
-
-    <a class="btn" href="chat.html">
-      <i class="fa-regular fa-comment-dots"></i>
-      立即体验
-    </a>
   </div>
 </section>
 
-<!-- 第二、三面 -->
-<section class="research-v2">
-  <div class="research-header">
-    <span class="tag">Core Capabilities</span>
-    <h2>类人跨空间认知能力</h2>
-    <p>
-      模拟人类在物理与信息空间中的联合认知方式，
-      支持自主探索、智能问答与任务级决策。
-    </p>
+<!-- 第二面 -->
+<section class="capability-section">
+  <h2 class="capability-title">类人跨空间认知能力</h2>
+  <div class="capability-tags">
+    <span class="tag active">类人导航</span>
+    <span class="tag">认知问答</span>
+    <span class="tag">任务智策</span>
   </div>
 
-  <div class="research-grid">
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>类人导航</h3>
-        <p class="desc">
-          模拟人类跨空间认知方式，实现自主环境探索与路径规划。
-        </p>
-        <ul>
-          <li>自主环境理解</li>
-          <li>动态路径规划</li>
-        </ul>
-      </div>
+  <div class="capability-cards three-cols">
+    <div class="cap-card">
+      <div class="cap-icon">🧭</div>
+      <h3>类人导航</h3>
+      <p>模拟人类跨空间认知方式，实现自主环境探索与路径规划。</p>
     </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>认知问答</h3>
-        <p class="desc">
-          基于多源信息与跨空间上下文理解，实现自主认知增强与智能问答。
-        </p>
-        <ul>
-          <li>跨空间上下文建模</li>
-          <li>复杂场景推理</li>
-        </ul>
-      </div>
+    <div class="cap-card">
+      <div class="cap-icon">🧠</div>
+      <h3>认知问答</h3>
+      <p>基于多源信息与跨空间上下文理解，实现自主认知增强与智能问答。</p>
     </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>任务智策</h3>
-        <p class="desc">
-          支持基于意图的任务编排与资源调配，
-          实现多智能体的协同规划与自适应决策。
-        </p>
-        <ul>
-          <li>意图理解</li>
-          <li>自适应规划</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="research-card">
-      <div class="card-image"></div>
-      <div class="card-content">
-        <h3>应用场景</h3>
-        <p class="desc">
-          基于跨空间融合分析实现开放环境的系统级认知与推理，
-          赋能交通、工业等复杂现实场景。
-        </p>
-        <ul>
-          <li>智慧交通</li>
-          <li>工业安全</li>
-        </ul>
-      </div>
+    <div class="cap-card">
+      <div class="cap-icon">⚙️</div>
+      <h3>任务智策</h3>
+      <p>支持基于意图的任务编排与资源调配，实现多智能体协同规划。</p>
     </div>
   </div>
 </section>
 
-<!-- 第四面 -->
-<section class="research-v2">
-  <div class="research-header">
-    <span class="tag">Scenario</span>
-    <h2>智慧交运系统</h2>
-    <p>
-      融合多源交通感知与线上数字信息，
-      实现基于任务目标的智能交通运输规划，
-      支持协同调度与风险预警。
-    </p>
+<!-- 第三面 -->
+<section class="capability-section">
+  <h2 class="capability-title">应用场景</h2>
+  <div class="capability-tags">
+    <span class="tag active">智慧交运系统</span>
+    <span class="tag">具身安监系统</span>
   </div>
-</section>
 
-<!-- 第五面 -->
-<section class="research-v2">
-  <div class="research-header">
-    <span class="tag">Scenario</span>
-    <h2>具身安监系统</h2>
-    <p>
-      协同利用巡检设备、监控系统与线上信息，
-      对工厂等复杂场景运行状态进行持续智能研判，
-      全面提升安全监测、隐患识别与应急响应能力。
-    </p>
+  <div class="capability-cards two-cols">
+    <div class="cap-card">
+      <div class="cap-icon">🚦</div>
+      <h3>智慧交运系统</h3>
+      <p>
+        融合多源交通感知与线上数字信息，
+        实现面向任务目标的智能交通运输规划，
+        支持协同调度与风险预警。
+      </p>
+    </div>
+
+    <div class="cap-card">
+      <div class="cap-icon">🏭</div>
+      <h3>具身安监系统</h3>
+      <p>
+        协同利用巡检设备、监控系统与线上信息，
+        对复杂场景运行状态进行持续智能研判，
+        提升安全监测与应急响应能力。
+      </p>
+    </div>
   </div>
 </section>
 

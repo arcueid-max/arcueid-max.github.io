@@ -137,10 +137,9 @@ nav .links a {
   color:#e5e7eb;
 }
 
-/* ======= 新增：卡片顶部科技感图标（只加，不改其他） ======= */
 .card-icon{
-  width:88px;
-  height:88px;
+  width:clamp(70px, 8vw, 110px);
+  height:clamp(70px, 8vw, 110px);
   margin:0 auto 22px;
   border-radius:20px;
   background:rgba(167,139,250,.15);
@@ -151,10 +150,15 @@ nav .links a {
     0 0 0 1px rgba(167,139,250,.35),
     0 0 30px rgba(139,92,246,.35);
 }
+
 .card-icon img{
-  width:64px;
+  max-width:60%;
+  max-height:60%;
+  width:auto;
   height:auto;
+  object-fit:contain;
 }
+
 
 /* ================= 第四面占位 ================= */
 .placeholder .img-box{
